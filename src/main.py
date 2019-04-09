@@ -11,25 +11,15 @@ import numpy as np
 from keras import backend as K
 
 # default args
-
-args = argparse.ArgumentParser(description='Program description.')
-args.add_argument('-d','--device', default='cpu', help='Either "cpu" or "cuda"')
-args.add_argument('-e','--epochs', default=1, type=int, help='Number of epochs')
-args.add_argument('-lr','--learning-rate', default=0.1, type=float, help='Learning rate')
-args.add_argument('-do','--dropout', default=0.3, type=float, help='Dropout rate')
-args.add_argument('-ea','--early-stopping', default=-1, type=int, help='Early stopping criteria')
-args.add_argument('-em','--embedding-size', default=100, type=int, help='Embedding dimension size')
-args.add_argument('-hs','--hidden-size', default=10, type=int, help='Hidden layer size')
-args.add_argument('-b','--batch-size', default=50, type=int, help='Batch Size')
-args = args.parse_args()
-print("Arguments: " + str(args))
-
-
-
-
-train_file = r'pos-data/a3/en-ud-train.upos.tsv'
-dev_file = r'pos-data/a3/en-ud-dev.upos.tsv'
-test_file = r'pos-data/a3/en-ud-test.upos.tsv'
+argparser = argparse.ArgumentParser(description='Program description.')
+argparser.add_argument('-d','--device', default='cpu', help='Either "cpu" or "cuda"')
+argparser.add_argument('-e','--epochs', default=1, type=int, help='Number of epochs')
+argparser.add_argument('-lr','--learning-rate', default=0.1, type=float, help='Learning rate')
+argparser.add_argument('-do','--dropout', default=0.3, type=float, help='Dropout rate')
+argparser.add_argument('-ea','--early-stopping', default=-1, type=int, help='Early stopping criteria')
+argparser.add_argument('-em','--embedding-size', default=100, type=int, help='Embedding dimension size')
+argparser.add_argument('-hs','--hidden-size', default=10, type=int, help='Hidden layer size')
+argparser.add_argument('-b','--batch-size', default=50, type=int, help='Batch Size')
 
 UNK = '[UNK]'
 PAD = '[PAD]'
@@ -140,6 +130,7 @@ def transform_text_sequence(seq):
     '''
     return seq
 
+
 # TODO
 def shift_by_one(seq):
     '''
@@ -149,49 +140,57 @@ def shift_by_one(seq):
     return seq[1:] + [PAD]
 
 
-vocab, train_data = get_vocabulary_and_data(train_file)
-_, dev_data = get_vocabulary_and_data(dev_file)
-_, test_data = get_vocabulary_and_data(test_file)
+def make_model(vocab, args):
+    num_words = len(vocab.keys())
 
-describe_data(train_data, None, None,
-              batch_generator_lm(train_data, vocab, args.batch_size))
+    model = Sequential()
+    model.add(Embedding(num_words, args.embedding_size))
+    model.add(Dropout(args.dropout))
+    model.add(LSTM(args.hidden_size, return_sequences=True))
+    model.add(Dropout(args.dropout))
+    model.add(LSTM(args.hidden_size, return_sequences=True))
+    model.add(Dropout(args.dropout))
+    model.add(TimeDistributed(Dense(num_words, activation='softmax')))
 
-# Implement your model here! ----------------------------------------------------------------------
-# Use the variables args.batch_size, args.hidden_size, args.embedding_size, args.dropout, args.epochs
-# You can input these as command line parameters.
-num_words = len(vocab.keys())
+    adadelta = optimizers.Adadelta(clipnorm=1.0)
+    model.compile(optimizer=adadelta, loss='categorical_crossentropy', metrics=['accuracy'])
 
-language_model = Sequential()
-language_model.add(Embedding(num_words, args.embedding_size))
-language_model.add(Dropout(args.dropout))
-language_model.add(LSTM(args.hidden_size, return_sequences=True))
-language_model.add(Dropout(args.dropout))
-language_model.add(LSTM(args.hidden_size, return_sequences=True))
-language_model.add(Dropout(args.dropout))
-language_model.add(TimeDistributed(Dense(num_words, activation='softmax')))
+    return model
 
 
-# ------------------------------------------------------------------------------------------------
-
-adadelta = optimizers.Adadelta(clipnorm=1.0)
-language_model.compile(optimizer=adadelta, loss='categorical_crossentropy', metrics=['accuracy'])
-
-
-# Training
-language_model.fit_generator(batch_generator_lm(train_data, vocab, args.batch_size),
-                             epochs=args.epochs,
-                             steps_per_epoch=len(train_data)/args.batch_size,
-                             callbacks=[EarlyStopping(monitor="acc", patience=2)])
-
-# Evaluation
-loss, acc = language_model.evaluate_generator(batch_generator_lm(dev_data, vocab),
-                                              steps=len(dev_data))
-print('Dev Loss:', loss, 'Dev Acc:', acc)
-loss, acc = language_model.evaluate_generator(batch_generator_lm(test_data, vocab),
-                                          steps=len(test_data))
-print('Test Loss:', loss, 'Test Acc:', acc)
+def train_model(model):
+    model.fit_generator(batch_generator_lm(train_data, vocab, args.batch_size),
+                        epochs=args.epochs,
+                        steps_per_epoch=len(train_data)/args.batch_size,
+                        callbacks=[EarlyStopping(monitor="acc", patience=2)])
 
 
-for i in range(10):
-    text = generate_text(language_model, vocab)
-    print(text)
+def eval_model(model, vocab, data):
+    loss, acc = model.evaluate_generator(batch_generator_lm(data, vocab), steps=len(data))
+    print('Loss:', loss, 'Acc:', acc)
+
+
+def main(args):
+    train_file = r'pos-data/a3/en-ud-train.upos.tsv'
+    dev_file = r'pos-data/a3/en-ud-dev.upos.tsv'
+    test_file = r'pos-data/a3/en-ud-test.upos.tsv'
+
+    vocab, train_data = get_vocabulary_and_data(train_file)
+    _, dev_data = get_vocabulary_and_data(dev_file)
+    _, test_data = get_vocabulary_and_data(test_file)
+
+    describe_data(train_data, None, None, batch_generator_lm(train_data, vocab, args.batch_size))
+
+    model = make_model(vocab, args)
+
+    # Evaluation
+    print("Dev:")
+    eval_model(model, vocab, dev_data)
+    print("Test:")
+    eval_model(model, vocab, test_data)
+
+
+if __name__ == '__main__':
+    args = argparser.parse_args()
+    print("Arguments: " + str(args))
+    main(args)
