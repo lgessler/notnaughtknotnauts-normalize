@@ -2,7 +2,8 @@
 
 ## Data
 
-- [Spanish and Portuguese](http://ps.clul.ul.pt/index.php?action=downloads)
+- [Spanish](http://ps.clul.ul.pt/index.php?action=downloads)
+    - CLUL (Ed.). 2014. P.S. Post Scriptum. Arquivo Digital de Escrita Quotidiana em Portugal e Espanha na Época Moderna. [last modified date]. URL: http://ps.clul.ul.pt.
 
 
 ## Papers
