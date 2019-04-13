@@ -1,7 +1,7 @@
 # Lit Review
 
 ## The Task
-Our project is focused on historical text normalization. Sometimes, this is also called historical text canonicalization, with the goal being to convert historical text into a standardized modern equivalent. This is a useful preprocessing step for research in the field of digital humanities
+Our project is focused on historical text normalization. Sometimes, this is also called historical text canonicalization, with the goal being to convert historical text into a standardized modern equivalent. This is a useful preprocessing step for research in the field of digital humanities.
 
 ## Overview of the Literature
 In many ways, the literature on this topic mirrors NLP research at large. Our selected references go back approximately ten years (though there are certainly older sources than that), and they exhibit a marked shift from heuristic, rule-based systems to complex statistical and neural models, though rule-based systems still perform well in certain cases. Most recently, the literature reflects a focus on statistical/neural machine translation, multi-task learning, attention, and deep learning.
