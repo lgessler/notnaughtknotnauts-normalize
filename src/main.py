@@ -174,7 +174,7 @@ def main(args):
                         callbacks=[EarlyStopping(monitor="acc", patience=2)])
 
     # Evaluation
-    eval_model(model, train_data, train_labels, vocab, labels_vocab, args)
+    eval_model(model, test_data, test_labels, vocab, labels_vocab, args)
 
 
 if __name__ == '__main__':
