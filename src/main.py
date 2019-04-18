@@ -1,5 +1,6 @@
 import argparse
 import os, random
+import pickle
 from collections import Counter
 
 from keras.models import Sequential
@@ -9,6 +10,37 @@ from keras import metrics, optimizers
 
 import numpy as np
 from keras import backend as K
+
+from parse_spanish import retrieve_all_data
+
+# caching
+def cached(cachefile):
+    """
+    A function that creates a decorator which will use "cachefile" for caching the results of the decorated function "fn".
+    """
+    def decorator(fn):  # define a decorator for a function "fn"
+        def wrapped(*args, **kwargs):   # define a wrapper that will finally call "fn" with all arguments
+            # if cache exists -> load it and return its content
+            if os.path.exists(cachefile):
+                    with open(cachefile, 'rb') as cachehandle:
+                        print("using cached result from '%s'" % cachefile)
+                        return pickle.load(cachehandle)
+
+            # execute the function with all arguments passed
+            res = fn(*args, **kwargs)
+
+            # write to cache file
+            with open(cachefile, 'wb') as cachehandle:
+                print("saving result to cache '%s'" % cachefile)
+                pickle.dump(res, cachehandle)
+
+            return res
+
+        return wrapped
+
+    return decorator
+retrieve_all_data = cached("cache.pickle")(retrieve_all_data)
+
 
 # default args
 argparser = argparse.ArgumentParser(description='Program description.')
@@ -21,34 +53,10 @@ argparser.add_argument('-em','--embedding-size', default=100, type=int, help='Em
 argparser.add_argument('-hs','--hidden-size', default=10, type=int, help='Hidden layer size')
 argparser.add_argument('-b','--batch-size', default=50, type=int, help='Batch Size')
 
-UNK = '[UNK]'
-PAD = '[PAD]'
-START = '<s>'
-END = '</s>'
-
-def get_vocabulary_and_data(data_file, max_vocab_size=10000):
-    vocab = Counter()
-    data = []
-    with open(data_file, 'r', encoding='utf8') as f:
-        sent = [START]
-        for line in f:
-            if line.strip():
-                tok, pos = line.strip().split('\t')[0], line.strip().split('\t')[1]
-                sent.append(tok)
-                vocab[tok]+=1
-                vocab[START]+=1
-                vocab[END]+=1
-            elif sent:
-                sent.append(END)
-                sent = transform_text_sequence(sent)
-                data.append(sent)
-                sent = [START]
-    vocab = sorted(list(vocab))
-    if max_vocab_size:
-        vocab = vocab[:len(vocab)-max_vocab_size]
-    vocab = [UNK, PAD] + vocab
-
-    return {k:v for v,k in enumerate(vocab)}, data
+UNK = 'अ'
+PAD = 'आ'
+START = 'श'
+END = 'स'
 
 
 def vectorize_sequence(seq, vocab):
@@ -57,26 +65,28 @@ def vectorize_sequence(seq, vocab):
 
 
 def unvectorize_sequence(seq, vocab):
-    translate = sorted(vocab.keys(),key=lambda k:vocab[k])
+    translate = sorted(vocab.keys(), key=lambda k: vocab[k])
     return [translate[i] for i in seq]
 
 
-def one_hot_encode_label(label, vocab):
-    vec = [1.0 if l==label else 0.0 for l in vocab]
-    return vec
+def one_hot_encode_label(label, labels):
+    vec = [1.0 if l == label else 0.0 for l in labels]
+    return np.array(vec)
 
 
-def batch_generator_lm(data, vocab, batch_size=1):
+def batch_generator(data, labels, vocab, batch_size=1):
     while True:
         batch_x = []
         batch_y = []
-        for sent in data:
-            batch_x.append(vectorize_sequence(sent, vocab))
-            batch_y.append([one_hot_encode_label(token, vocab) for token in shift_by_one(sent)])
+        for word, norm_word in zip(data, labels):
+            word = START + word + END
+            norm_word = START + norm_word + END
+            batch_x.append(vectorize_sequence(word, vocab))
+            batch_y.append([one_hot_encode_label(norm_word, label) for label in labels])
             if len(batch_x) >= batch_size:
                 # Pad Sequences in batch to same length
                 batch_x = pad_sequences(batch_x, vocab[PAD])
-                batch_y = pad_sequences(batch_y, one_hot_encode_label(PAD, vocab))
+                batch_y = pad_sequences(batch_y, one_hot_encode_label(PAD, labels))
                 yield np.array(batch_x), np.array(batch_y)
                 batch_x = []
                 batch_y = []
@@ -88,9 +98,9 @@ def describe_data(data, gold_labels, label_set, generator):
         batch_x = bx
         batch_y = by
         break
-    print('Data example:',data[0])
-    print('Label:',None)
-    print('Label count:', None)
+    print('Data example:', data[0])
+    print('Label:', gold_labels[0])
+    print('Label count:', len(label_set))
     print('Batch input shape:', batch_x.shape)
     print('Batch output shape:', batch_y.shape)
 
@@ -109,19 +119,6 @@ def pad_sequences(batch_x, pad_value):
     return batch_x
 
 
-def generate_text(language_model, vocab):
-    prediction = [START]
-    while not (prediction[-1] == END or len(prediction)>=50):
-        next_token_one_hot = language_model.predict(np.array([[vocab[p] for p in prediction]]), batch_size=1)[0][-1]
-        next_tokens = sorted([i for i,v in enumerate(next_token_one_hot)], key=lambda i:next_token_one_hot[i], reverse=True)[:10]
-        next_token = next_tokens[random.randint(0, 9)]
-        for w, i in vocab.items():
-            if i==next_token:
-                prediction.append(w)
-                break
-    return prediction
-
-
 # TODO
 def transform_text_sequence(seq):
     '''
@@ -131,26 +128,19 @@ def transform_text_sequence(seq):
     return seq
 
 
-# TODO
-def shift_by_one(seq):
-    '''
-    input: ['<s>', 'The', 'dog', 'chased', 'the', 'cat', 'around', 'the', 'house', '</s>']
-    output: ['The', 'dog', 'chased', 'the', 'cat', 'around', 'the', 'house', '</s>', '[PAD]']
-    '''
-    return seq[1:] + [PAD]
-
-
-def make_model(vocab, args):
-    num_words = len(vocab.keys())
+def make_model(vocab, labels, args):
+    num_chars = len(vocab.keys())
+    num_labels = len(set([char for char_seq in labels for char in char_seq]))
 
     model = Sequential()
-    model.add(Embedding(num_words, args.embedding_size))
+    model.add(Embedding(num_chars, args.embedding_size))
     model.add(Dropout(args.dropout))
-    model.add(LSTM(args.hidden_size, return_sequences=True))
+    model.add(Bidirectional(LSTM(args.hidden_size, return_sequences=True)))
     model.add(Dropout(args.dropout))
-    model.add(LSTM(args.hidden_size, return_sequences=True))
-    model.add(Dropout(args.dropout))
-    model.add(TimeDistributed(Dense(num_words, activation='softmax')))
+    model.add(TimeDistributed(Dense(num_labels, activation='softmax')))
+
+    for layer in model.layers:
+        print(layer.output_shape)
 
     adadelta = optimizers.Adadelta(clipnorm=1.0)
     model.compile(optimizer=adadelta, loss='categorical_crossentropy', metrics=['accuracy'])
@@ -158,36 +148,32 @@ def make_model(vocab, args):
     return model
 
 
-def train_model(model):
-    model.fit_generator(batch_generator_lm(train_data, vocab, args.batch_size),
-                        epochs=args.epochs,
-                        steps_per_epoch=len(train_data)/args.batch_size,
-                        callbacks=[EarlyStopping(monitor="acc", patience=2)])
-
-
-def eval_model(model, vocab, data):
-    loss, acc = model.evaluate_generator(batch_generator_lm(data, vocab), steps=len(data))
+def eval_model(model, data, labels, vocab):
+    loss, acc = model.evaluate_generator(batch_generator(data, labels, vocab), steps=len(data))
     print('Loss:', loss, 'Acc:', acc)
 
 
 def main(args):
-    train_file = r'pos-data/a3/en-ud-train.upos.tsv'
-    dev_file = r'pos-data/a3/en-ud-dev.upos.tsv'
-    test_file = r'pos-data/a3/en-ud-test.upos.tsv'
+    #train_file = r'pos-data/a3/en-ud-train.upos.tsv'
+    #dev_file = r'pos-data/a3/en-ud-dev.upos.tsv'
+    #test_file = r'pos-data/a3/en-ud-test.upos.tsv'
 
-    vocab, train_data = get_vocabulary_and_data(train_file)
-    _, dev_data = get_vocabulary_and_data(dev_file)
-    _, test_data = get_vocabulary_and_data(test_file)
+    #vocab, train_data = get_vocabulary_and_data(train_file)
+    #_, dev_data = get_vocabulary_and_data(dev_file)
+    #_, test_data = get_vocabulary_and_data(test_file)
 
-    describe_data(train_data, None, None, batch_generator_lm(train_data, vocab, args.batch_size))
+    train_data, train_labels, vocab, \
+    dev_data, dev_labels, \
+    test_data, test_labels = retrieve_all_data()
 
-    model = make_model(vocab, args)
+    vocab = {c: i for i, c in enumerate(list(set([c for w in vocab for c in w])) + [UNK, PAD, START, END])}
+
+    describe_data(train_data, train_labels, vocab, batch_generator(train_data, train_labels, vocab, args.batch_size))
+
+    model = make_model(vocab, train_labels, args)
 
     # Evaluation
-    print("Dev:")
-    eval_model(model, vocab, dev_data)
-    print("Test:")
-    eval_model(model, vocab, test_data)
+    eval_model(model, train_data, train_labels, vocab)
 
 
 if __name__ == '__main__':
