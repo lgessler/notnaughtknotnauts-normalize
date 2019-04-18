@@ -82,11 +82,11 @@ def batch_generator(data, labels, vocab, batch_size=1):
             word = START + word + END
             norm_word = START + norm_word + END
             batch_x.append(vectorize_sequence(word, vocab))
-            batch_y.append([one_hot_encode_label(norm_word, label) for label in labels])
+            batch_y.append([one_hot_encode_label(label, vocab) for label in norm_word])
             if len(batch_x) >= batch_size:
                 # Pad Sequences in batch to same length
                 batch_x = pad_sequences(batch_x, vocab[PAD])
-                batch_y = pad_sequences(batch_y, one_hot_encode_label(PAD, labels))
+                batch_y = pad_sequences(batch_y, one_hot_encode_label(PAD, vocab))
                 yield np.array(batch_x), np.array(batch_y)
                 batch_x = []
                 batch_y = []
@@ -130,7 +130,7 @@ def transform_text_sequence(seq):
 
 def make_model(vocab, labels, args):
     num_chars = len(vocab.keys())
-    num_labels = len(set([char for char_seq in labels for char in char_seq]))
+    num_labels = len(set(char for char_seq in labels for char in char_seq))
 
     model = Sequential()
     model.add(Embedding(num_chars, args.embedding_size))
@@ -148,32 +148,24 @@ def make_model(vocab, labels, args):
     return model
 
 
-def eval_model(model, data, labels, vocab):
-    loss, acc = model.evaluate_generator(batch_generator(data, labels, vocab), steps=len(data))
+def eval_model(model, data, labels, vocab, args):
+    loss, acc = model.evaluate_generator(batch_generator(data, labels, vocab, args.batch_size), steps=len(data))
     print('Loss:', loss, 'Acc:', acc)
 
 
 def main(args):
-    #train_file = r'pos-data/a3/en-ud-train.upos.tsv'
-    #dev_file = r'pos-data/a3/en-ud-dev.upos.tsv'
-    #test_file = r'pos-data/a3/en-ud-test.upos.tsv'
-
-    #vocab, train_data = get_vocabulary_and_data(train_file)
-    #_, dev_data = get_vocabulary_and_data(dev_file)
-    #_, test_data = get_vocabulary_and_data(test_file)
-
     train_data, train_labels, vocab, \
     dev_data, dev_labels, \
     test_data, test_labels = retrieve_all_data()
 
-    vocab = {c: i for i, c in enumerate(list(set([c for w in vocab for c in w])) + [UNK, PAD, START, END])}
+    vocab = {c: i for i, c in enumerate(list(set(c for w in vocab for c in w)) + [UNK, PAD, START, END])}
 
     describe_data(train_data, train_labels, vocab, batch_generator(train_data, train_labels, vocab, args.batch_size))
 
     model = make_model(vocab, train_labels, args)
 
     # Evaluation
-    eval_model(model, train_data, train_labels, vocab)
+    eval_model(model, train_data, train_labels, vocab, args)
 
 
 if __name__ == '__main__':
