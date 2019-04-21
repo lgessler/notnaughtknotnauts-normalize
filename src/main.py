@@ -24,11 +24,22 @@ argparser.add_argument('-do', '--dropout', default=0.3, type=float, help='Dropou
 argparser.add_argument('-em', '--embedding-size', default=100, type=int, help='Embedding dimension size')
 argparser.add_argument('-hs', '--hidden-size', default=10, type=int, help='Hidden layer size')
 argparser.add_argument('-c', '--century', default="all", type=str, help='Century')
+argparser.add_argument('-cn', '--context-n', default=2, type=int, help='Number of toks to look to the left and right')
 
 UNK = 'अ'
 PAD = 'आ'
 START = 'श'
 END = 'स'
+TOKSEP = 'क'
+
+
+def vectorize_sequence_with_context(tok_index, vocab, tokens, args):
+    result = []
+    for i in range(-args.context_n, args.context_n + 1):
+        result += [vocab[char] if char in vocab else UNK
+                   for char in tokens[(tok_index + i) % len(tokens)]]
+
+    return result
 
 
 def vectorize_sequence(word, vocab):
@@ -41,14 +52,16 @@ def one_hot_encode(char, vocab):
     return np.array(vec)
 
 
-def batch_generator(orig, norm, orig_vocab, norm_vocab, batch_size=1):
+def batch_generator(orig, norm, orig_vocab, norm_vocab, args):
+    batch_size = args.batch_size
     while True:
         batch_x = []
         batch_y = []
-        for orig_word, norm_word in zip(orig, norm):
+        for i, (orig_word, norm_word) in enumerate(zip(orig, norm)):
             orig_word = START + orig_word + END
             norm_word = START + norm_word + END
-            batch_x.append(vectorize_sequence(orig_word, orig_vocab))
+            #batch_x.append(vectorize_sequence(orig_word, orig_vocab))
+            batch_x.append(vectorize_sequence_with_context(i, orig_vocab, orig, args))
             batch_y.append([one_hot_encode(char, norm_vocab) for char in norm_word])
             if len(batch_x) >= batch_size:
                 # Pad Sequences in batch to same length
@@ -117,16 +130,17 @@ def make_model(orig_vocab, norm_vocab, args):
 
 def eval_model(model, orig, norm, orig_vocab, norm_vocab, args):
     loss, acc = model.evaluate_generator(
-        batch_generator(orig, norm, orig_vocab, norm_vocab, args.batch_size), steps=len(orig))
+        batch_generator(orig, norm, orig_vocab, norm_vocab, args), steps=len(orig))
 
     # Vectorized inputs and labels
     orig_vecs = []
     norm_vecs = []
 
-    for orig_word, norm_word in zip(orig, norm):
+    for i, (orig_word, norm_word) in enumerate(zip(orig, norm)):
         orig_word = START + orig_word + END
         norm_word = START + norm_word + END
-        orig_vecs.append(vectorize_sequence(orig_word, orig_vocab))
+        #orig_vecs.append(vectorize_sequence(orig_word, orig_vocab))
+        orig_vecs.append(vectorize_sequence_with_context(i, orig_vocab, orig, args))
         norm_vecs.append([one_hot_encode(c, norm_vocab) for c in norm_word])
     pad_length = len(max(orig_vecs + norm_vecs, key=lambda x: len(x)))
     orig_vecs = pad_sequences(orig_vecs, pad_length, orig_vocab[PAD])
@@ -191,7 +205,7 @@ def eval_baseline(train_orig, train_norm, test_orig, test_norm):
 
 
 def vocab_dict(toks):
-    return {c: i for i, c in enumerate(list(set(c for w in toks for c in w)) + [UNK, PAD, START, END])}
+    return {c: i for i, c in enumerate(list(set(c for w in toks for c in w)) + [UNK, PAD, START, END, TOKSEP])}
 
 
 def main(args):
@@ -203,12 +217,12 @@ def main(args):
                                                                     test_size=0.2, random_state=42)
 
     describe_data(train_orig, train_norm, vocab_orig,
-                  batch_generator(train_orig, train_norm, vocab_orig, vocab_norm, args.batch_size))
+                  batch_generator(train_orig, train_norm, vocab_orig, vocab_norm, args))
 
     model = make_model(vocab_orig, vocab_norm, args)
 
     # training
-    model.fit_generator(batch_generator(train_orig, train_norm, vocab_orig, vocab_norm, args.batch_size),
+    model.fit_generator(batch_generator(train_orig, train_norm, vocab_orig, vocab_norm, args),
                         epochs=args.epochs,
                         steps_per_epoch=len(train_orig) / args.batch_size,
                         max_queue_size=1000,
