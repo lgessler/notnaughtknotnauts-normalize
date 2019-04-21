@@ -15,47 +15,15 @@ logging.set_verbosity(logging.ERROR)
 
 from parse_spanish import retrieve_tokens, retrieve_century
 
-# caching
-def cached(cachefile):
-    """
-    A function that creates a decorator which will use "cachefile" for caching the results of the decorated function "fn".
-    """
-    def decorator(fn):  # define a decorator for a function "fn"
-        def wrapped(*args, **kwargs):   # define a wrapper that will finally call "fn" with all arguments
-            # if cache exists -> load it and return its content
-            if os.path.exists(cachefile):
-                    with open(cachefile, 'rb') as cachehandle:
-                        print("using cached result from '%s'" % cachefile)
-                        return pickle.load(cachehandle)
-
-            # execute the function with all arguments passed
-            res = fn(*args, **kwargs)
-
-            # write to cache file
-            with open(cachefile, 'wb') as cachehandle:
-                print("saving result to cache '%s'" % cachefile)
-                pickle.dump(res, cachehandle)
-
-            return res
-
-        return wrapped
-
-    return decorator
-
-retrieve_tokens = cached("tokens.pickle")(retrieve_tokens)
-retrieve_century = cached("century.pickle")(retrieve_century)
-
-
 # default args
 argparser = argparse.ArgumentParser(description='Program description.')
-argparser.add_argument('-d','--device', default='cpu', help='Either "cpu" or "cuda"')
-argparser.add_argument('-e','--epochs', default=3, type=int, help='Number of epochs')
-argparser.add_argument('-lr','--learning-rate', default=0.1, type=float, help='Learning rate')
-argparser.add_argument('-do','--dropout', default=0.3, type=float, help='Dropout rate')
-argparser.add_argument('-ea','--early-stopping', default=-1, type=int, help='Early stopping criteria')
-argparser.add_argument('-em','--embedding-size', default=100, type=int, help='Embedding dimension size')
-argparser.add_argument('-hs','--hidden-size', default=10, type=int, help='Hidden layer size')
-argparser.add_argument('-b','--batch-size', default=50, type=int, help='Batch Size')
+argparser.add_argument('-e', '--epochs', default=3, type=int, help='Number of epochs')
+argparser.add_argument('-b', '--batch-size', default=50, type=int, help='Batch Size')
+argparser.add_argument('-lr', '--learning-rate', default=0.1, type=float, help='Learning rate')
+argparser.add_argument('-do', '--dropout', default=0.3, type=float, help='Dropout rate')
+argparser.add_argument('-em', '--embedding-size', default=100, type=int, help='Embedding dimension size')
+argparser.add_argument('-hs', '--hidden-size', default=10, type=int, help='Hidden layer size')
+argparser.add_argument('-c', '--century', default="all", type=str, help='Century')
 
 UNK = 'अ'
 PAD = 'आ'
@@ -227,7 +195,7 @@ def vocab_dict(toks):
 
 
 def main(args):
-    orig_toks, norm_toks = retrieve_tokens()
+    orig_toks, norm_toks = retrieve_tokens(century=args.century)
     vocab_orig = vocab_dict(orig_toks)
     vocab_norm = vocab_dict(norm_toks)
     vocab_both = vocab_dict(orig_toks + norm_toks)
