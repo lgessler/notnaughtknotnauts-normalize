@@ -170,8 +170,61 @@ def eval_model(model, orig, norm, orig_vocab, norm_vocab, args):
 
     print('Loss:', loss, 'Acc:', acc)
 
+    # A list of possible output characters
+    norm_chars = list(norm_vocab.keys())
+
+    predicted_words = []
+    # Each prediction is something like a 26 x 57 array, where 26 is the number of
+    # characters in the word and 57 is the size of the vocabulary
+    test_predictions = model.predict(orig_vecs, batch_size=1000)
+    for word_vector in test_predictions:
+        word = ""
+        for character_num in range(len(word_vector)):
+            # Find the index of the character in the vocabulary with highest probability according to the model
+            vocab_index = np.argmax(word_vector[character_num])
+            # Convert that index back into a character and append it to the current word
+            character = norm_chars[vocab_index]
+            word += character
+        predicted_words.append(word)
+
+    # Remove all PAD characters in each word and START and END tokens
+    predicted_words = [word.replace(PAD, "") for word in predicted_words]
+    predicted_words = [word.replace(START, "") for word in predicted_words]
+    predicted_words = [word.replace(END, "") for word in predicted_words]
+    results = np.column_stack((predicted_words, norm))
+
+    # Calculate accuracy as the percentage of exact matches between the model output (without PAD) and the labels
+    accuracy = np.mean([1 if result[0] == result[1] else 0 for result in results])
+    print(f"Accuracy after removing all padding characters: {accuracy}")
+
+
+def eval_baseline(train_orig, train_norm, test_orig, test_norm):
+    # Initialize an empty dictionary, each entry for a word will be a counter
+    word_map = {}
+    for index, word in enumerate(train_orig):
+        if word not in word_map:
+            word_map[word] = Counter()
+            word_map[word][train_norm[index]] += 1
+        else:
+            word_map[word][train_norm[index]] += 1
+
+    baseline_predicted_words = []
+    for word in test_orig:
+        # For each original word, predict its most common mapping
+        if word in word_map:
+            predicted_word = word_map[word].most_common(1)[0][0]
+        else:
+            predicted_word = UNK
+        baseline_predicted_words.append(predicted_word)
+
+    baseline_results = np.column_stack((baseline_predicted_words, test_norm))
+    baseline_accuracy = np.mean([1 if result[0] == result[1] else 0 for result in baseline_results])
+    print(f"Baseline accuracy: {baseline_accuracy}")
+
+
 def vocab_dict(toks):
     return {c: i for i, c in enumerate(list(set(c for w in toks for c in w)) + [UNK, PAD, START, END])}
+
 
 def main(args):
     orig_toks, norm_toks = retrieve_tokens()
@@ -195,6 +248,7 @@ def main(args):
 
     # Evaluation
     eval_model(model, test_orig, test_norm, vocab_orig, vocab_norm, args)
+    eval_baseline(train_orig, train_norm, test_orig, test_norm)
 
 
 if __name__ == '__main__':
