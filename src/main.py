@@ -90,7 +90,6 @@ def batch_generator(orig, norm, orig_vocab, norm_vocab, batch_size=1):
                 yield np.array(batch_x), np.array(batch_y)
                 batch_x = []
                 batch_y = []
-        yield np.array(batch_x), np.array(batch_y)
 
 
 def describe_data(data, gold_labels, label_set, generator):
@@ -171,12 +170,14 @@ def eval_model(model, orig, norm, orig_vocab, norm_vocab, args):
 
     print('Loss:', loss, 'Acc:', acc)
 
+def vocab_dict(toks):
+    return {c: i for i, c in enumerate(list(set(c for w in toks for c in w)) + [UNK, PAD, START, END])}
+
 def main(args):
     orig_toks, norm_toks = retrieve_tokens()
-    vocab_orig = {c: i for i, c in enumerate(list(set(c for w in orig_toks for c in w)) + [UNK, PAD, START, END])}
-    vocab_norm = {c: i for i, c in enumerate(list(set(c for w in norm_toks for c in w)) + [UNK, PAD, START, END])}
-    vocab_both = {c: i for i, c in
-                  enumerate(list(set(c for w in (orig_toks + norm_toks) for c in w)) + [UNK, PAD, START, END])}
+    vocab_orig = vocab_dict(orig_toks)
+    vocab_norm = vocab_dict(norm_toks)
+    vocab_both = vocab_dict(orig_toks + norm_toks)
     train_orig, test_orig, train_norm, test_norm = train_test_split(np.array(orig_toks), np.array(norm_toks),
                                                                     test_size=0.2, random_state=42)
 
