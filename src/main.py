@@ -177,7 +177,7 @@ def main(args):
     vocab_norm = {c: i for i, c in enumerate(list(set(c for w in norm_toks for c in w)) + [UNK, PAD, START, END])}
     vocab_both = {c: i for i, c in
                   enumerate(list(set(c for w in (orig_toks + norm_toks) for c in w)) + [UNK, PAD, START, END])}
-    train_orig, train_norm, test_orig, test_norm = train_test_split(np.array(orig_toks), np.array(norm_toks),
+    train_orig, test_orig, train_norm, test_norm = train_test_split(np.array(orig_toks), np.array(norm_toks),
                                                                     test_size=0.2, random_state=42)
 
     describe_data(train_orig, train_norm, vocab_orig,
