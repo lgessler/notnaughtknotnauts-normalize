@@ -1,17 +1,19 @@
 import argparse
 import os, random
 import pickle
+import numpy as np
 from collections import Counter
 
 from keras.models import Sequential
 from keras.layers import Embedding, Bidirectional, LSTM, Dense, TimeDistributed, Dropout
 from keras.callbacks import EarlyStopping
 from keras import metrics, optimizers
-
-import numpy as np
 from keras import backend as K
+from sklearn.model_selection import train_test_split
+from tensorflow import logging
+logging.set_verbosity(logging.ERROR)
 
-from parse_spanish import retrieve_all_data
+from parse_spanish import retrieve_tokens, retrieve_century
 
 # caching
 def cached(cachefile):
@@ -39,13 +41,15 @@ def cached(cachefile):
         return wrapped
 
     return decorator
-retrieve_all_data = cached("cache.pickle")(retrieve_all_data)
+
+retrieve_tokens = cached("tokens.pickle")(retrieve_tokens)
+retrieve_century = cached("century.pickle")(retrieve_century)
 
 
 # default args
 argparser = argparse.ArgumentParser(description='Program description.')
 argparser.add_argument('-d','--device', default='cpu', help='Either "cpu" or "cuda"')
-argparser.add_argument('-e','--epochs', default=1, type=int, help='Number of epochs')
+argparser.add_argument('-e','--epochs', default=3, type=int, help='Number of epochs')
 argparser.add_argument('-lr','--learning-rate', default=0.1, type=float, help='Learning rate')
 argparser.add_argument('-do','--dropout', default=0.3, type=float, help='Dropout rate')
 argparser.add_argument('-ea','--early-stopping', default=-1, type=int, help='Early stopping criteria')
@@ -59,38 +63,34 @@ START = 'श'
 END = 'स'
 
 
-def vectorize_sequence(seq, vocab):
-    seq = [tok if tok in vocab else UNK for tok in seq]
-    return [vocab[tok] for tok in seq]
+def vectorize_sequence(word, vocab):
+    word = [char if char in vocab else UNK for char in word]
+    return [vocab[char] for char in word]
 
 
-def unvectorize_sequence(seq, vocab):
-    translate = sorted(vocab.keys(), key=lambda k: vocab[k])
-    return [translate[i] for i in seq]
-
-
-def one_hot_encode_label(label, labels):
-    vec = [1.0 if l == label else 0.0 for l in labels]
+def one_hot_encode(char, vocab):
+    vec = [1.0 if c == char else 0.0 for c in vocab]
     return np.array(vec)
 
 
-def batch_generator(data, labels, vocab, labels_vocab, batch_size=1):
+def batch_generator(orig, norm, orig_vocab, norm_vocab, batch_size=1):
     while True:
         batch_x = []
         batch_y = []
-        for word, norm_word in zip(data, labels):
-            word = START + word + END
+        for orig_word, norm_word in zip(orig, norm):
+            orig_word = START + orig_word + END
             norm_word = START + norm_word + END
-            batch_x.append(vectorize_sequence(word, vocab))
-            batch_y.append([one_hot_encode_label(label, labels_vocab) for label in norm_word])
+            batch_x.append(vectorize_sequence(orig_word, orig_vocab))
+            batch_y.append([one_hot_encode(char, norm_vocab) for char in norm_word])
             if len(batch_x) >= batch_size:
                 # Pad Sequences in batch to same length
                 pad_length = len(max(batch_x + batch_y, key=lambda x: len(x)))
-                batch_x = pad_sequences(batch_x, pad_length, vocab[PAD])
-                batch_y = pad_sequences(batch_y, pad_length, one_hot_encode_label(PAD, labels_vocab))
+                batch_x = pad_sequences(batch_x, pad_length, orig_vocab[PAD])
+                batch_y = pad_sequences(batch_y, pad_length, one_hot_encode(PAD, norm_vocab))
                 yield np.array(batch_x), np.array(batch_y)
                 batch_x = []
                 batch_y = []
+        yield np.array(batch_x), np.array(batch_y)
 
 
 def describe_data(data, gold_labels, label_set, generator):
@@ -128,16 +128,16 @@ def transform_text_sequence(seq):
     return seq
 
 
-def make_model(vocab, labels_vocab, args):
-    num_chars = len(vocab.keys())
-    num_labels = len(labels_vocab.keys())
+def make_model(orig_vocab, norm_vocab, args):
+    num_chars_orig = len(orig_vocab.keys())
+    num_chars_norm = len(norm_vocab.keys())
 
     model = Sequential()
-    model.add(Embedding(num_chars, args.embedding_size))
+    model.add(Embedding(num_chars_orig, args.embedding_size))
     model.add(Dropout(args.dropout))
     model.add(Bidirectional(LSTM(args.hidden_size, return_sequences=True)))
     model.add(Dropout(args.dropout))
-    model.add(TimeDistributed(Dense(num_labels, activation='softmax')))
+    model.add(TimeDistributed(Dense(num_chars_norm, activation='softmax')))
 
     for layer in model.layers:
         print(layer.output_shape)
@@ -148,33 +148,52 @@ def make_model(vocab, labels_vocab, args):
     return model
 
 
-def eval_model(model, data, labels, vocab, labels_vocab, args):
-    loss, acc = model.evaluate_generator(batch_generator(data, labels, vocab, labels_vocab, args.batch_size), steps=len(data))
+def eval_model(model, orig, norm, orig_vocab, norm_vocab, args):
+    loss, acc = model.evaluate_generator(
+        batch_generator(orig, norm, orig_vocab, norm_vocab, args.batch_size), steps=len(orig))
+
+    # Vectorized inputs and labels
+    orig_vecs = []
+    norm_vecs = []
+
+    for orig_word, norm_word in zip(orig, norm):
+        orig_word = START + orig_word + END
+        norm_word = START + norm_word + END
+        orig_vecs.append(vectorize_sequence(orig_word, orig_vocab))
+        norm_vecs.append([one_hot_encode(c, norm_vocab) for c in norm_word])
+    pad_length = len(max(orig_vecs + norm_vecs, key=lambda x: len(x)))
+    orig_vecs = pad_sequences(orig_vecs, pad_length, orig_vocab[PAD])
+    norm_vecs = pad_sequences(norm_vecs, pad_length, one_hot_encode(PAD, norm_vocab))
+    orig_vecs = np.array(orig_vecs)
+    norm_vecs = np.array(norm_vecs)
+
+    loss, acc = model.evaluate(orig_vecs, norm_vecs, batch_size=1000, verbose=1)
+
     print('Loss:', loss, 'Acc:', acc)
 
-
 def main(args):
-    train_data, train_labels, vocab, \
-    dev_data, dev_labels, \
-    test_data, test_labels = retrieve_all_data()
+    orig_toks, norm_toks = retrieve_tokens()
+    vocab_orig = {c: i for i, c in enumerate(list(set(c for w in orig_toks for c in w)) + [UNK, PAD, START, END])}
+    vocab_norm = {c: i for i, c in enumerate(list(set(c for w in norm_toks for c in w)) + [UNK, PAD, START, END])}
+    vocab_both = {c: i for i, c in
+                  enumerate(list(set(c for w in (orig_toks + norm_toks) for c in w)) + [UNK, PAD, START, END])}
+    train_orig, train_norm, test_orig, test_norm = train_test_split(np.array(orig_toks), np.array(norm_toks),
+                                                                    test_size=0.2, random_state=42)
 
-    vocab = {c: i for i, c in enumerate(list(set(c for w in vocab for c in w)) + [UNK, PAD, START, END])}
-    labels_vocab = {c: i for i, c in
-                    enumerate(list(set(c for w in train_labels + dev_labels + test_labels for c in w))
-                              + [UNK, PAD, START, END])}
+    describe_data(train_orig, train_norm, vocab_orig,
+                  batch_generator(train_orig, train_norm, vocab_orig, vocab_norm, args.batch_size))
 
-    describe_data(train_data, train_labels, vocab, batch_generator(train_data, train_labels, vocab, labels_vocab, args.batch_size))
-
-    model = make_model(vocab, labels_vocab, args)
+    model = make_model(vocab_orig, vocab_norm, args)
 
     # training
-    model.fit_generator(batch_generator(train_data, train_labels, vocab, labels_vocab, args.batch_size),
+    model.fit_generator(batch_generator(train_orig, train_norm, vocab_orig, vocab_norm, args.batch_size),
                         epochs=args.epochs,
-                        steps_per_epoch=len(train_data) / args.batch_size,
+                        steps_per_epoch=len(train_orig) / args.batch_size,
+                        max_queue_size=1000,
                         callbacks=[EarlyStopping(monitor="acc", patience=2)])
 
     # Evaluation
-    eval_model(model, test_data, test_labels, vocab, labels_vocab, args)
+    eval_model(model, test_orig, test_norm, vocab_orig, vocab_norm, args)
 
 
 if __name__ == '__main__':
