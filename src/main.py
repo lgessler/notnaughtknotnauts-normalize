@@ -4,8 +4,8 @@ import pickle
 import numpy as np
 from collections import Counter
 
-from keras.models import Sequential
-from keras.layers import Embedding, Bidirectional, LSTM, Dense, TimeDistributed, Dropout, Input, Model
+from keras.models import Sequential, Model
+from keras.layers import Embedding, Bidirectional, LSTM, Dense, TimeDistributed, Dropout, Input
 from keras.callbacks import EarlyStopping
 from keras import metrics, optimizers
 from keras import backend as K
@@ -178,7 +178,81 @@ def eval_model(model, orig, norm, orig_vocab, norm_vocab, args):
     print(f"Char accuracy after removing all padding characters: {char_acc}")
 
 
-def eval_baseline(train_orig, train_norm, test_orig, test_norm):
+def eval_model_with_baseline(model, train_orig, train_norm, orig, norm, orig_vocab, norm_vocab, args):
+    loss, acc = model.evaluate_generator(
+        batch_generator(orig, norm, orig_vocab, norm_vocab, args), steps=len(orig))
+
+    # Vectorized inputs and labels
+    orig_vecs = []
+    norm_vecs = []
+
+    for i, (orig_word, norm_word) in enumerate(zip(orig, norm)):
+        orig_word = START + orig_word + END
+        norm_word = START + norm_word + END
+        orig_vecs.append(vectorize_sequence_with_context(i, orig_vocab, orig, args))
+        norm_vecs.append([one_hot_encode(c, norm_vocab) for c in norm_word])
+    pad_length = len(max(orig_vecs + norm_vecs, key=lambda x: len(x)))
+    orig_vecs = pad_sequences(orig_vecs, pad_length, orig_vocab[PAD])
+    norm_vecs = pad_sequences(norm_vecs, pad_length, one_hot_encode(PAD, norm_vocab))
+    orig_vecs = np.array(orig_vecs)
+    norm_vecs = np.array(norm_vecs)
+
+    loss, acc = model.evaluate(orig_vecs, norm_vecs, batch_size=1000, verbose=1)
+
+    print('Loss:', loss, 'Acc:', acc)
+
+    # A list of possible output characters
+    norm_chars = list(norm_vocab.keys())
+
+    predicted_words = []
+    # Each prediction is something like a 26 x 57 array, where 26 is the number of
+    # characters in the word and 57 is the size of the vocabulary
+    test_predictions = model.predict(orig_vecs, batch_size=1000)
+    for word_vector in test_predictions:
+        word = ""
+        for character_num in range(len(word_vector)):
+            # Find the index of the character in the vocabulary with highest probability according to the model
+            vocab_index = np.argmax(word_vector[character_num])
+            # Convert that index back into a character and append it to the current word
+            character = norm_chars[vocab_index]
+            word += character
+        predicted_words.append(word)
+        print("Predicted word: " + word)
+
+    # Remove all PAD characters in each word and START and END tokens
+    predicted_words = [word.replace(PAD, "") for word in predicted_words]
+    predicted_words = [word.replace(START, "") for word in predicted_words]
+    predicted_words = [word.replace(END, "") for word in predicted_words]
+    results = np.column_stack((predicted_words, norm))
+
+    # get baseline results and choose baseline prediction if the word was seen before
+    baseline_dict, baseline_results = predict_baseline(train_orig, train_norm, orig, norm)
+    combined_results = np.array([baseline_results[i] if baseline_results[i][0] in baseline_dict
+                                 else results[i] for i in range(len(results))])
+    print("Model results")
+    print(results)
+    print("Baseline results")
+    print(baseline_results)
+    print("Combined results")
+    print(combined_results)
+
+    # Calculate accuracy as the percentage of exact matches between the model output (without PAD) and the labels
+    word_acc = word_accuracy(baseline_results)
+    char_acc = char_accuracy(baseline_results)
+    print(f"Baseline word accuracy after removing all padding characters: {word_acc}")
+    print(f"Baseline char accuracy after removing all padding characters: {char_acc}")
+    word_acc = word_accuracy(results)
+    char_acc = char_accuracy(results)
+    print(f"Model word accuracy after removing all padding characters: {word_acc}")
+    print(f"Model char accuracy after removing all padding characters: {char_acc}")
+    word_acc = word_accuracy(combined_results)
+    char_acc = char_accuracy(combined_results)
+    print(f"Hybrid word accuracy after removing all padding characters: {word_acc}")
+    print(f"Hybrid char accuracy after removing all padding characters: {char_acc}")
+
+
+
+def predict_baseline(train_orig, train_norm, test_orig, test_norm):
     # Initialize an empty dictionary, each entry for a word will be a counter
     word_map = {}
     for index, word in enumerate(train_orig):
@@ -195,9 +269,15 @@ def eval_baseline(train_orig, train_norm, test_orig, test_norm):
             predicted_word = word_map[word].most_common(1)[0][0]
         else:
             predicted_word = UNK
-        baseline_predicted_words.append(predicted_word)
+        baseline_predicted_words.append([word, predicted_word])
 
-    results = np.column_stack((baseline_predicted_words, test_norm))
+    return word_map, np.array(baseline_predicted_words)
+
+
+def eval_baseline(train_orig, train_norm, test_orig, test_norm):
+    # Initialize an empty dictionary, each entry for a word will be a counter
+    _, results = predict_baseline(train_orig, train_norm, test_orig, test_norm)
+    print(results)
     word_acc = word_accuracy(results)
     char_acc = char_accuracy(results)
     print(f"Word accuracy for baseline: {word_acc}")
@@ -205,12 +285,12 @@ def eval_baseline(train_orig, train_norm, test_orig, test_norm):
 
 
 def vocab_dict(toks):
-    return {c: i for i, c in enumerate(list(set(c for w in toks for c in w)) + [UNK, PAD, START, END, TOKSEP])}
+    return {c: i for i, c in enumerate(list(set(c for w in toks for c in w)))}
 
 
 def lstm_system(train_orig, train_norm, test_orig, test_norm, vocab_orig, vocab_norm, vocab_both):
-    num_chars_orig = len(orig_vocab.keys())
-    num_chars_norm = len(norm_vocab.keys())
+    num_chars_orig = len(vocab_orig.keys())
+    num_chars_norm = len(vocab_norm.keys())
 
     model = Sequential()
     model.add(Embedding(num_chars_orig, args.embedding_size))
@@ -237,9 +317,38 @@ def lstm_system(train_orig, train_norm, test_orig, test_norm, vocab_orig, vocab_
     eval_baseline(train_orig, train_norm, test_orig, test_norm)
 
 
+def hybrid_system(train_orig, train_norm, test_orig, test_norm, vocab_orig, vocab_norm, vocab_both):
+    num_chars_orig = len(vocab_orig.keys())
+    num_chars_norm = len(vocab_norm.keys())
+
+    model = Sequential()
+    model.add(Embedding(num_chars_orig, args.embedding_size))
+    model.add(Dropout(args.dropout))
+    model.add(Bidirectional(LSTM(args.hidden_size, return_sequences=True)))
+    model.add(Dropout(args.dropout))
+    model.add(TimeDistributed(Dense(num_chars_norm, activation='softmax')))
+
+    for layer in model.layers:
+        print(layer.output_shape)
+
+    adadelta = optimizers.Adadelta(clipnorm=1.0)
+    model.compile(optimizer=adadelta, loss='categorical_crossentropy', metrics=['accuracy'])
+
+    # training
+    model.fit_generator(batch_generator(train_orig, train_norm, vocab_orig, vocab_norm, args),
+                        epochs=args.epochs,
+                        steps_per_epoch=len(train_orig) / args.batch_size,
+                        max_queue_size=1000,
+                        callbacks=[EarlyStopping(monitor="acc", patience=2)])
+
+    # Evaluation
+    eval_model_with_baseline(model, train_orig, train_norm, test_orig, test_norm, vocab_orig, vocab_norm, args)
+
+
+
 def encoder_decoder_system(train_orig, train_norm, test_orig, test_norm, vocab_orig, vocab_norm, vocab_both):
-    num_chars_orig = len(orig_vocab.keys())
-    num_chars_norm = len(norm_vocab.keys())
+    num_chars_orig = len(vocab_orig.keys())
+    num_chars_norm = len(vocab_orig.keys())
     n_units = 256
 
 	# define training encoder
@@ -283,16 +392,17 @@ def encoder_decoder_system(train_orig, train_norm, test_orig, test_norm, vocab_o
 
 def main(args):
     orig_toks, norm_toks = retrieve_tokens(century=args.century)
-    vocab_orig = vocab_dict(orig_toks)
-    vocab_norm = vocab_dict(norm_toks)
-    vocab_both = vocab_dict(orig_toks + norm_toks)
+    vocab_orig = vocab_dict(orig_toks + [UNK, PAD, START, END, TOKSEP])
+    vocab_norm = vocab_dict(norm_toks + [START, END, PAD])
+    vocab_both = vocab_dict(orig_toks + norm_toks + [UNK, PAD, START, END, TOKSEP])
     train_orig, test_orig, train_norm, test_norm = train_test_split(np.array(orig_toks), np.array(norm_toks),
                                                                     test_size=0.2, random_state=42)
 
     describe_data(train_orig, train_norm, vocab_orig,
                   batch_generator(train_orig, train_norm, vocab_orig, vocab_norm, args))
 
-    lstm_system(train_orig, train_norm, test_orig, test_norm, vocab_orig, vocab_norm, vocab_both)
+    #lstm_system(train_orig, train_norm, test_orig, test_norm, vocab_orig, vocab_norm, vocab_both)
+    hybrid_system(train_orig, train_norm, test_orig, test_norm, vocab_orig, vocab_norm, vocab_both)
     #encoder_decoder_system(train_orig, train_norm, test_orig, test_norm, vocab_orig, vocab_norm, vocab_both)
 
 
