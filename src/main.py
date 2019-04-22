@@ -5,10 +5,11 @@ import numpy as np
 from collections import Counter
 
 from keras.models import Sequential
-from keras.layers import Embedding, Bidirectional, LSTM, Dense, TimeDistributed, Dropout
+from keras.layers import Embedding, Bidirectional, LSTM, Dense, TimeDistributed, Dropout, Input, Model
 from keras.callbacks import EarlyStopping
 from keras import metrics, optimizers
 from keras import backend as K
+from keras.utils import to_categorical
 from sklearn.model_selection import train_test_split
 from tensorflow import logging
 logging.set_verbosity(logging.ERROR)
@@ -17,14 +18,14 @@ from parse_spanish import retrieve_tokens, retrieve_century
 
 # default args
 argparser = argparse.ArgumentParser(description='Program description.')
-argparser.add_argument('-e', '--epochs', default=3, type=int, help='Number of epochs')
+argparser.add_argument('-e', '--epochs', default=5, type=int, help='Number of epochs')
 argparser.add_argument('-b', '--batch-size', default=50, type=int, help='Batch Size')
 argparser.add_argument('-lr', '--learning-rate', default=0.1, type=float, help='Learning rate')
 argparser.add_argument('-do', '--dropout', default=0.3, type=float, help='Dropout rate')
 argparser.add_argument('-em', '--embedding-size', default=100, type=int, help='Embedding dimension size')
 argparser.add_argument('-hs', '--hidden-size', default=10, type=int, help='Hidden layer size')
 argparser.add_argument('-c', '--century', default="all", type=str, help='Century')
-argparser.add_argument('-cn', '--context-n', default=2, type=int, help='Number of toks to look to the left and right')
+argparser.add_argument('-cn', '--context-n', default=0, type=int, help='Number of toks to look to the left and right')
 
 UNK = 'अ'
 PAD = 'आ'
@@ -36,8 +37,13 @@ TOKSEP = 'क'
 def vectorize_sequence_with_context(tok_index, vocab, tokens, args):
     result = []
     for i in range(-args.context_n, args.context_n + 1):
-        result += [vocab[char] if char in vocab else UNK
+        chars = [vocab[char] if char in vocab else UNK
                    for char in tokens[(tok_index + i) % len(tokens)]]
+        if i == 0:
+            chars = [vocab[START]] + chars + [vocab[END]]
+        if i < args.context_n:
+            chars += [vocab[TOKSEP]]
+        result += chars
 
     return result
 
@@ -60,7 +66,6 @@ def batch_generator(orig, norm, orig_vocab, norm_vocab, args):
         for i, (orig_word, norm_word) in enumerate(zip(orig, norm)):
             orig_word = START + orig_word + END
             norm_word = START + norm_word + END
-            #batch_x.append(vectorize_sequence(orig_word, orig_vocab))
             batch_x.append(vectorize_sequence_with_context(i, orig_vocab, orig, args))
             batch_y.append([one_hot_encode(char, norm_vocab) for char in norm_word])
             if len(batch_x) >= batch_size:
@@ -108,25 +113,16 @@ def transform_text_sequence(seq):
     return seq
 
 
-def make_model(orig_vocab, norm_vocab, args):
-    num_chars_orig = len(orig_vocab.keys())
-    num_chars_norm = len(norm_vocab.keys())
+def char_accuracy(results):
+    accs = []
+    for pred, norm in results:
+        acc = np.mean([1 if i < len(norm) and norm[i] == c else 0
+                       for i, c in enumerate(pred)])
+        accs.append(acc)
+    return np.mean(accs)
 
-    model = Sequential()
-    model.add(Embedding(num_chars_orig, args.embedding_size))
-    model.add(Dropout(args.dropout))
-    model.add(Bidirectional(LSTM(args.hidden_size, return_sequences=True)))
-    model.add(Dropout(args.dropout))
-    model.add(TimeDistributed(Dense(num_chars_norm, activation='softmax')))
-
-    for layer in model.layers:
-        print(layer.output_shape)
-
-    adadelta = optimizers.Adadelta(clipnorm=1.0)
-    model.compile(optimizer=adadelta, loss='categorical_crossentropy', metrics=['accuracy'])
-
-    return model
-
+def word_accuracy(results):
+    return np.mean([1 if result[0] == result[1] else 0 for result in results])
 
 def eval_model(model, orig, norm, orig_vocab, norm_vocab, args):
     loss, acc = model.evaluate_generator(
@@ -139,7 +135,6 @@ def eval_model(model, orig, norm, orig_vocab, norm_vocab, args):
     for i, (orig_word, norm_word) in enumerate(zip(orig, norm)):
         orig_word = START + orig_word + END
         norm_word = START + norm_word + END
-        #orig_vecs.append(vectorize_sequence(orig_word, orig_vocab))
         orig_vecs.append(vectorize_sequence_with_context(i, orig_vocab, orig, args))
         norm_vecs.append([one_hot_encode(c, norm_vocab) for c in norm_word])
     pad_length = len(max(orig_vecs + norm_vecs, key=lambda x: len(x)))
@@ -168,6 +163,7 @@ def eval_model(model, orig, norm, orig_vocab, norm_vocab, args):
             character = norm_chars[vocab_index]
             word += character
         predicted_words.append(word)
+        print("Predicted word: " + word)
 
     # Remove all PAD characters in each word and START and END tokens
     predicted_words = [word.replace(PAD, "") for word in predicted_words]
@@ -176,8 +172,10 @@ def eval_model(model, orig, norm, orig_vocab, norm_vocab, args):
     results = np.column_stack((predicted_words, norm))
 
     # Calculate accuracy as the percentage of exact matches between the model output (without PAD) and the labels
-    accuracy = np.mean([1 if result[0] == result[1] else 0 for result in results])
-    print(f"Accuracy after removing all padding characters: {accuracy}")
+    word_acc = word_accuracy(results)
+    char_acc = char_accuracy(results)
+    print(f"Word accuracy after removing all padding characters: {word_acc}")
+    print(f"Char accuracy after removing all padding characters: {char_acc}")
 
 
 def eval_baseline(train_orig, train_norm, test_orig, test_norm):
@@ -199,13 +197,88 @@ def eval_baseline(train_orig, train_norm, test_orig, test_norm):
             predicted_word = UNK
         baseline_predicted_words.append(predicted_word)
 
-    baseline_results = np.column_stack((baseline_predicted_words, test_norm))
-    baseline_accuracy = np.mean([1 if result[0] == result[1] else 0 for result in baseline_results])
-    print(f"Baseline accuracy: {baseline_accuracy}")
+    results = np.column_stack((baseline_predicted_words, test_norm))
+    word_acc = word_accuracy(results)
+    char_acc = char_accuracy(results)
+    print(f"Word accuracy for baseline: {word_acc}")
+    print(f"Char accuracy for baseline: {char_acc}")
 
 
 def vocab_dict(toks):
     return {c: i for i, c in enumerate(list(set(c for w in toks for c in w)) + [UNK, PAD, START, END, TOKSEP])}
+
+
+def lstm_system(train_orig, train_norm, test_orig, test_norm, vocab_orig, vocab_norm, vocab_both):
+    num_chars_orig = len(orig_vocab.keys())
+    num_chars_norm = len(norm_vocab.keys())
+
+    model = Sequential()
+    model.add(Embedding(num_chars_orig, args.embedding_size))
+    model.add(Dropout(args.dropout))
+    model.add(Bidirectional(LSTM(args.hidden_size, return_sequences=True)))
+    model.add(Dropout(args.dropout))
+    model.add(TimeDistributed(Dense(num_chars_norm, activation='softmax')))
+
+    for layer in model.layers:
+        print(layer.output_shape)
+
+    adadelta = optimizers.Adadelta(clipnorm=1.0)
+    model.compile(optimizer=adadelta, loss='categorical_crossentropy', metrics=['accuracy'])
+
+    # training
+    model.fit_generator(batch_generator(train_orig, train_norm, vocab_orig, vocab_norm, args),
+                        epochs=args.epochs,
+                        steps_per_epoch=len(train_orig) / args.batch_size,
+                        max_queue_size=1000,
+                        callbacks=[EarlyStopping(monitor="acc", patience=2)])
+
+    # Evaluation
+    eval_model(model, test_orig, test_norm, vocab_orig, vocab_norm, args)
+    eval_baseline(train_orig, train_norm, test_orig, test_norm)
+
+
+def encoder_decoder_system(train_orig, train_norm, test_orig, test_norm, vocab_orig, vocab_norm, vocab_both):
+    num_chars_orig = len(orig_vocab.keys())
+    num_chars_norm = len(norm_vocab.keys())
+    n_units = 256
+
+	# define training encoder
+    encoder_inputs = Input(shape=(None, num_chars_orig))
+    encoder = LSTM(n_units, return_state=True)
+    encoder_outputs, state_h, state_c = encoder(encoder_inputs)
+    encoder_states = [state_h, state_c]
+
+    # define training decoder
+    decoder_inputs = Input(shape=(None, num_chars_norm))
+    decoder_lstm = LSTM(n_units, return_sequences=True, return_state=True)
+    decoder_outputs, _, _ = decoder_lstm(decoder_inputs, initial_state=encoder_states)
+    decoder_dense = Dense(num_chars_norm, activation='softmax')
+    decoder_outputs = decoder_dense(decoder_outputs)
+    model = Model([encoder_inputs, decoder_inputs], decoder_outputs)
+
+    # define inference encoder
+    encoder_model = Model(encoder_inputs, encoder_states)
+
+    # define inference decoder
+    decoder_state_input_h = Input(shape=(n_units,))
+    decoder_state_input_c = Input(shape=(n_units,))
+    decoder_states_inputs = [decoder_state_input_h, decoder_state_input_c]
+    decoder_outputs, state_h, state_c = decoder_lstm(decoder_inputs, initial_state=decoder_states_inputs)
+    decoder_states = [state_h, state_c]
+    decoder_outputs = decoder_dense(decoder_outputs)
+    decoder_model = Model([decoder_inputs] + decoder_states_inputs, [decoder_outputs] + decoder_states)
+
+    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['acc'])
+
+
+    # return all models
+    model.fit_generator(batch_generator(train_orig, train_norm, vocab_orig, vocab_norm, args),
+                        epochs=args.epochs,
+                        steps_per_epoch=len(train_orig) / args.batch_size,
+                        max_queue_size=1000,
+                        callbacks=[EarlyStopping(monitor="acc", patience=2)])
+
+
 
 
 def main(args):
@@ -219,18 +292,9 @@ def main(args):
     describe_data(train_orig, train_norm, vocab_orig,
                   batch_generator(train_orig, train_norm, vocab_orig, vocab_norm, args))
 
-    model = make_model(vocab_orig, vocab_norm, args)
+    lstm_system(train_orig, train_norm, test_orig, test_norm, vocab_orig, vocab_norm, vocab_both)
+    #encoder_decoder_system(train_orig, train_norm, test_orig, test_norm, vocab_orig, vocab_norm, vocab_both)
 
-    # training
-    model.fit_generator(batch_generator(train_orig, train_norm, vocab_orig, vocab_norm, args),
-                        epochs=args.epochs,
-                        steps_per_epoch=len(train_orig) / args.batch_size,
-                        max_queue_size=1000,
-                        callbacks=[EarlyStopping(monitor="acc", patience=2)])
-
-    # Evaluation
-    eval_model(model, test_orig, test_norm, vocab_orig, vocab_norm, args)
-    eval_baseline(train_orig, train_norm, test_orig, test_norm)
 
 
 if __name__ == '__main__':
