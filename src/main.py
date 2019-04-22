@@ -162,14 +162,17 @@ def eval_model(model, orig, norm, orig_vocab, norm_vocab, args):
             # Convert that index back into a character and append it to the current word
             character = norm_chars[vocab_index]
             word += character
-        predicted_words.append(word)
-        print("Predicted word: " + word)
 
-    # Remove all PAD characters in each word and START and END tokens
-    predicted_words = [word.replace(PAD, "") for word in predicted_words]
-    predicted_words = [word.replace(START, "") for word in predicted_words]
-    predicted_words = [word.replace(END, "") for word in predicted_words]
+        # Remove all PAD characters in each word and START and END tokens
+        word = word.replace(PAD, "")
+        word = word.replace(START, "")
+        word = word.replace(END, "")
+        predicted_words.append(word)
+
     results = np.column_stack((predicted_words, norm))
+    for i, (predicted_word, gold_word) in enumerate(results):
+        orig_word = orig[i]
+        print(f"Input: {orig_word}\tPredicted: {predicted_word}\tGold: {gold_word}")
 
     # Calculate accuracy as the percentage of exact matches between the model output (without PAD) and the labels
     word_acc = word_accuracy(results)
@@ -216,14 +219,17 @@ def eval_model_with_baseline(model, train_orig, train_norm, orig, norm, orig_voc
             # Convert that index back into a character and append it to the current word
             character = norm_chars[vocab_index]
             word += character
-        predicted_words.append(word)
-        print("Predicted word: " + word)
 
-    # Remove all PAD characters in each word and START and END tokens
-    predicted_words = [word.replace(PAD, "") for word in predicted_words]
-    predicted_words = [word.replace(START, "") for word in predicted_words]
-    predicted_words = [word.replace(END, "") for word in predicted_words]
+        # Remove all PAD characters in each word and START and END tokens
+        word = word.replace(PAD, "")
+        word = word.replace(START, "")
+        word = word.replace(END, "")
+        predicted_words.append(word)
+
     results = np.column_stack((predicted_words, norm))
+    for i, (predicted_word, gold_word) in enumerate(results):
+        orig_word = orig[i]
+        print(f"Input: '{orig_word}'\tPredicted: '{predicted_word}'\tGold: '{gold_word}'")
 
     # get baseline results and choose baseline prediction if the word was seen before
     baseline_dict, baseline_results = predict_baseline(train_orig, train_norm, orig, norm)
