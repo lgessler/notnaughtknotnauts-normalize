@@ -64,3 +64,24 @@ def retrieve_tokens(century="all"):
             all_norm_toks += norm_toks
         return all_orig_toks, all_norm_toks
 
+if __name__ == "__main__":
+    filepath = '../data/'
+    basename = 'all_centuries_toks'
+    otoks, ntoks = retrieve_tokens()
+    print("Found " + str(len(otoks)) + " tokens.")
+
+    tok_pairs = list(zip(otoks, ntoks))
+
+    dev = len(otoks) // 10
+    test = len(otoks) // 10 * 2
+    with open(filepath + basename + '.dev.tsv', 'w') as f:
+        for orig, norm in tok_pairs[:dev]:
+            f.write(f"{orig}\t{norm}\n")
+    with open(filepath + basename + '.test.tsv', 'w') as f:
+        for orig, norm in tok_pairs[dev:test]:
+            f.write(f"{orig}\t{norm}\n")
+    with open(filepath + basename + '.train.tsv', 'w') as f:
+        for orig, norm in tok_pairs[test:]:
+            f.write(f"{orig}\t{norm}\n")
+
+
