@@ -1,0 +1,202 @@
+
+@article{jurish_more_2010,
+	title = {More {Than} {Words}: {Using} {Token} {Context} to {Improve} {Canonicalization} of {Historical} {German}},
+	volume = {25},
+	abstract = {Historical text presents numerous challenges for contemporary natural language processing techniques. In particular, the absence of consistent orthographic conventions in historical text presents diﬃculties for any system requiring reference to a static lexicon indexed by orthographic form. Canonicalization approaches seek to address these issues by associating one or more extant “canonical cognates” with each word of the input text and deferring application analysis to these canonical forms. Typewise conﬂation techniques treating each input word in isolation often suﬀer from a pronounced precision–recall trade-oﬀ pattern: high-precision techniques such as conservative transliteration have comparatively poor recall, whereas high-recall techniques such as phonetic conﬂation tend to be disappointingly imprecise. In this paper, we present a technique for disambiguation of type conﬂation sets at the token level using a Hidden Markov Model whose lexical probability matrix is dynamically computed from the candidate conﬂations, and evaluate its performance on a manually annotated corpus of historical German.},
+	language = {en},
+	journal = {JOURNAL FOR LANGUAGE TECHNOLOGY AND COMPUTATIONAL LINGUISTICS},
+	author = {Jurish, Bryan},
+	year = {2010},
+	pages = {23--40},
+	file = {Jurish - More Than Words Using Token Context to Improve Ca.pdf:C\:\\Users\\mkran\\Zotero\\storage\\A3U63MHG\\Jurish - More Than Words Using Token Context to Improve Ca.pdf:application/pdf}
+}
+
+@phdthesis{jurish_finite-state_2011,
+	type = {2011/10/06},
+	title = {Finite-{State} {Canonicalization} {Techniques} for {Historical} {German}},
+	url = {https://nbn-resolving.org/urn:nbn:de:kobv:517-opus-55789},
+	abstract = {This work addresses issues in the automatic preprocessing of historical German input text for use by conventional natural language processing techniques. Conventional techniques cannot adequately account for historical input text due to conventional tools' reliance on a fixed application-specific lexicon keyed by contemporary orthographic surface form on the one hand, and the lack of consistent orthographic conventions in historical input text on the other. Historical spelling variation is treated here as an error-correction problem or "canonicalization" task: an attempt to automatically assign each (historical) input word a unique extant canonical cognate, thus allowing direct application-specific processing (tagging, parsing, etc.) of the returned canonical forms without need for any additional application-specific modifications. In the course of the work, various methods for automatic canonicalization are investigated and empirically evaluated, including conflation by phonetic identity, conflation by lemma instantiation heuristics, canonicalization by weighted finite-state rewrite cascade, and token-wise disambiguation by a dynamic Hidden Markov Model.},
+	language = {en},
+	school = {Universität Potsdam},
+	author = {Jurish, Bryan},
+	year = {2011},
+	file = {Jurish - Finite-State Canonicalization Techniques for Histo.pdf:C\:\\Users\\mkran\\Zotero\\storage\\ESAGR94L\\Jurish - Finite-State Canonicalization Techniques for Histo.pdf:application/pdf}
+}
+
+@inproceedings{jurish_comparing_2010,
+	address = {Uppsala, Sweden},
+	title = {Comparing {Canonicalizations} of {Historical} {German} {Text}},
+	url = {https://www.aclweb.org/anthology/W10-2209},
+	abstract = {Historical text presents numerous challenges for contemporary natural language processing techniques. In particular, the absence of consistent orthographic conventions in historical text presents difﬁculties for any system requiring reference to a static lexicon accessed by orthographic form. In this paper, we present three methods for associating unknown historical word forms with synchronically active canonical cognates and evaluate their performance on an information retrieval task over a manually annotated corpus of historical German verse.},
+	language = {en},
+	booktitle = {Proceedings of the 11th {Meeting} of the {ACL} {Special} {Interest} {Group} on {Computational} {Morphology} and {Phonology}},
+	publisher = {Association for Computational Linguistics},
+	author = {Jurish, Bryan},
+	year = {2010},
+	pages = {72--77},
+	file = {Jurish - Comparing Canonicalizations of Historical German T.pdf:C\:\\Users\\mkran\\Zotero\\storage\\SRDQWBLI\\Jurish - Comparing Canonicalizations of Historical German T.pdf:application/pdf}
+}
+
+@inproceedings{korchagina_normalizing_2017,
+	address = {Gothenburg},
+	title = {Normalizing {Medieval} {German} {Texts}: from rules to deep learning},
+	url = {https://www.aclweb.org/anthology/W17-0504},
+	abstract = {The application of NLP tools to historical texts is complicated by a high level of spelling variation. Different methods of historical text normalization have been proposed. In this comparative evaluation I test the following three approaches to text canonicalization on historical German texts from 15th–16th centuries: rule-based, statistical machine translation, and neural machine translation. Character based neural machine translation, not being previously tested for the task of normalization, showed the best results.},
+	language = {en},
+	booktitle = {Proceedings of the {NoDaLiDa} 2017 {Workshop} on {Processing} {Historical} {Language}},
+	publisher = {Linköping University Electronic Press},
+	author = {Korchagina, Natalia},
+	month = may,
+	year = {2017},
+	pages = {12--17},
+	file = {Korchagina - 2017 - Normalizing Medieval German Texts from rules to d.pdf:C\:\\Users\\mkran\\Zotero\\storage\\4JEAYIAZ\\Korchagina - 2017 - Normalizing Medieval German Texts from rules to d.pdf:application/pdf}
+}
+
+@inproceedings{etxeberria_evaluating_2016,
+	address = {Portorož, Slovenia},
+	title = {Evaluating the {Noisy} {Channel} {Model} for the {Normalization} of {Historical} {Texts}: {Basque}, {Spanish} and {Slovene}},
+	isbn = {978-2-9517408-9-1},
+	url = {http://www.lrec-conf.org/proceedings/lrec2016/pdf/147_Paper.pdf},
+	abstract = {This paper presents a method for the normalization of historical texts using a combination of weighted ﬁnite-state transducers and language models. We have extended our previous work on the normalization of dialectal texts and tested the method against a 17th century literary work in Basque. This preprocessed corpus is made available in the LREC repository. The performance of this (semi-)supervised method for learning relations between historical and contemporary word forms is evaluated against resources in three languages. The method we present learns to map phonological changes using a noisy channel model; it is a solution that uses a limited amount of supervision in order to achieve adequate performance without the need of an unrealistic amount of manual effort. The model is based on techniques commonly used for phonological inference and producing Grapheme-to-Grapheme conversion systems encoded as weighted transducers and produces F-scores above 80\% in the task for Basque. A wider evaluation shows that the approach performs equally well with all the languages in our evaluation suite: Basque, Spanish and Slovene. A comparison against other methods that address the same task is also provided.},
+	language = {en},
+	booktitle = {Proceedings of the {Tenth} {International} {Conference} on {Language} {Resources} and {Evaluation} ({LREC} 2016)},
+	publisher = {European Language Resources Association (ELRA)},
+	author = {Etxeberria, Izaskun and Alegria, Inaki and Uria, Larraitz and Hulden, Mans},
+	month = may,
+	year = {2016},
+	pages = {6},
+	file = {Etxeberria - Evaluating the Noisy Channel Model for the Normali.pdf:C\:\\Users\\mkran\\Zotero\\storage\\UW52E8L5\\Etxeberria - Evaluating the Noisy Channel Model for the Normali.pdf:application/pdf}
+}
+
+@inproceedings{bollmann_learning_2017,
+	address = {Vancouver, Canada},
+	title = {Learning attention for historical text normalization by learning to pronounce},
+	url = {http://aclweb.org/anthology/P17-1031},
+	doi = {10.18653/v1/P17-1031},
+	abstract = {Automated processing of historical texts often relies on pre-normalization to modern word forms. Training encoder-decoder architectures to solve such problems typically requires a lot of training data, which is not available for the named task. We address this problem by using several novel encoder-decoder architectures, including a multi-task learning (MTL) architecture using a grapheme-to-phoneme dictionary as auxiliary data, pushing the state-of-theart by an absolute 2\% increase in performance. We analyze the induced models across 44 different texts from Early New High German. Interestingly, we observe that, as previously conjectured, multi-task learning can learn to focus attention during decoding, in ways remarkably similar to recently proposed attention mechanisms. This, we believe, is an important step toward understanding how MTL works.},
+	language = {en},
+	urldate = {2019-04-13},
+	booktitle = {Proceedings of the 55th {Annual} {Meeting} of the {Association} for           {Computational} {Linguistics} ({Volume} 1: {Long} {Papers})},
+	publisher = {Association for Computational Linguistics},
+	author = {Bollmann, Marcel and Bingel, Joachim and Søgaard, Anders},
+	year = {2017},
+	pages = {332--344},
+	file = {Bollmann et al. - 2017 - Learning attention for historical text normalizati.pdf:C\:\\Users\\mkran\\Zotero\\storage\\DLGN8FGT\\Bollmann et al. - 2017 - Learning attention for historical text normalizati.pdf:application/pdf}
+}
+
+@inproceedings{robertson_evaluating_2018,
+	address = {New Orleans, Louisiana},
+	title = {Evaluating {Historical} {Text} {Normalization} {Systems}: {How} {Well} {Do} {They} {Generalize}?},
+	shorttitle = {Evaluating {Historical} {Text} {Normalization} {Systems}},
+	url = {http://aclweb.org/anthology/N18-2113},
+	doi = {10.18653/v1/N18-2113},
+	abstract = {We highlight several issues in the evaluation of historical text normalization systems that make it hard to tell how well these systems would actually work in practice—i.e., for new datasets or languages; in comparison to more naïve systems; or as a preprocessing step for downstream NLP tools. We illustrate these issues and exemplify our proposed evaluation practices by comparing two neural models against a naïve baseline system. We show that the neural models generalize well to unseen words in tests on ﬁve languages; nevertheless, they provide no clear beneﬁt over the naïve baseline for downstream POS tagging of an English historical collection. We conclude that future work should include more rigorous evaluation, including both intrinsic and extrinsic measures where possible.},
+	language = {en},
+	urldate = {2019-04-13},
+	booktitle = {Proceedings of the 2018 {Conference} of the {North} {American} {Chapter} of           the {Association} for {Computational} {Linguistics}: {Human} {Language}           {Technologies}, {Volume} 2 ({Short} {Papers})},
+	publisher = {Association for Computational Linguistics},
+	author = {Robertson, Alexander and Goldwater, Sharon},
+	year = {2018},
+	pages = {720--725},
+	file = {Robertson and Goldwater - 2018 - Evaluating Historical Text Normalization Systems .pdf:C\:\\Users\\mkran\\Zotero\\storage\\UDJNDP96\\Robertson and Goldwater - 2018 - Evaluating Historical Text Normalization Systems .pdf:application/pdf}
+}
+
+@inproceedings{bollmann_rule-based_2011,
+	address = {Hissar, Bulgaria},
+	title = {Rule-{Based} {Normalization} of {Historical} {Texts}},
+	url = {https://www.aclweb.org/anthology/W11-4106},
+	abstract = {This paper deals with normalization of language data from Early New High German. We describe an unsupervised, rulebased approach which maps historical wordforms to modern wordforms. Rules are speciﬁed in the form of context-aware rewrite rules that apply to sequences of characters. They are derived from two aligned versions of the Luther bible and weighted according to their frequency. The evaluation shows that our approach (83\%–91\% exact matches) clearly outperforms the baseline (65\%).},
+	language = {en},
+	booktitle = {Proceedings of the {Workshop} on {Language} {Technologies} for {Digital} {Humanities} and {Cultural} {Heritage}},
+	publisher = {Association for Computational Linguistics},
+	author = {Bollmann, Marcel and Petran, Florian and Dipper, Stefanie},
+	month = sep,
+	year = {2011},
+	pages = {32--42},
+	file = {Bollmann et al. - Rule-Based Normalization of Historical Texts.pdf:C\:\\Users\\mkran\\Zotero\\storage\\6DX7NQHU\\Bollmann et al. - Rule-Based Normalization of Historical Texts.pdf:application/pdf}
+}
+
+@inproceedings{bollmann_few-shot_2019,
+	title = {Few-{Shot} and {Zero}-{Shot} {Learning} for {Historical} {Text} {Normalization}},
+	url = {https://arxiv.org/abs/1903.04870},
+	abstract = {Historical text normalization often relies on small training datasets. Recent work has shown that multi-task learning can sometimes lead to signiﬁcant improvements by exploiting synergies with related datasets, but there has been no systematic study of multi-task learning strategies across different datasets from different languages. This paper evaluates 63 multi-task learning strategies for sequence-to-sequence-based historical text normalization across ten datasets from eight languages, using autoencoding, grapheme-tophoneme mapping, and lemmatization as auxiliary tasks. We observe consistent, signiﬁcant improvements across languages when training data for the target task is limited, but minimal or no improvements when training data is abundant. Finally, we show that zero-shot learning outperforms the simple, but relatively strong, identity baseline.},
+	language = {en},
+	author = {Bollmann, Marcel and Korchagina, Natalia and Søgaard, Anders},
+	month = mar,
+	year = {2019},
+	pages = {10},
+	file = {Bollmann et al. - Few-Shot and Zero-Shot Learning for Historical Tex.pdf:C\:\\Users\\mkran\\Zotero\\storage\\29ZIWPSC\\Bollmann et al. - Few-Shot and Zero-Shot Learning for Historical Tex.pdf:application/pdf}
+}
+
+@inproceedings{schneider_comparing_2017,
+	address = {Gothenburg},
+	title = {Comparing {Rule}-based and {SMT}-based {Spelling} {Normalisation} for {English} {Historical} {Texts}},
+	url = {https://www.aclweb.org/anthology/W17-0508},
+	abstract = {To be able to use existing natural language processing tools for analysing historical text, an important preprocessing step is spelling normalisation, converting the original spelling to present-day spelling, before applying tools such as taggers and parsers. In this paper, we compare a probablistic, language-independent approach to spelling normalisation based on statistical machine translation (SMT) techniques, to a rule-based system combining dictionary lookup with rules and non-probabilistic weights. The rule-based system reaches the best accuracy, up to 94\% precision at 74\% recall, while the SMT system improves each tested period.},
+	language = {en},
+	booktitle = {Proceedings of the {NoDaLiDa} 2017 {Workshop} on {Processing} {Historical} {Language}},
+	publisher = {Linköping University Electronic Press},
+	author = {Schneider, Gerold and Pettersson, Eva and Percillier, Michael},
+	month = may,
+	year = {2017},
+	pages = {40--46},
+	file = {Schneider et al. - 2017 - Comparing Rule-based and SMT-based Spelling Normal.pdf:C\:\\Users\\mkran\\Zotero\\storage\\XZZY2JRK\\Schneider et al. - 2017 - Comparing Rule-based and SMT-based Spelling Normal.pdf:application/pdf}
+}
+
+@article{vaamonde_post_2014,
+	title = {Post {Scriptum}: {Archivo} {Digital} de {Escritura} {Cotidiana}},
+	issn = {2254-7290},
+	url = {http://hdl.handle.net/10400.26/20209},
+	abstract = {Post Scriptum: A Digital Archive of Ordinary Writings (P.S.) is a project that aims to collect and publish Portuguese and Spanish private letters written along the Modern Ages. These documents are unpublished epistolary writings, written by authors from different social backgrounds. They could be either masters or servants, adults or children, men or women, thieves, soldiers, artisans, priests, political activists, among other kinds of social agents. Their epistolarity survived by chance, when their paths met the persecution means used by the Inquisition and the civil courts, two institutions that used private correspondence as criminal evidence. These textual resources often present an (almost) oral rhetoric, treating everyday issues of past centuries in a register that hasn’t been easy to study, apart from brief examples. In the proposed paper, discussion over the methodological options that lead to the digital edition available online will be raised. Further, the modernization of texts the POS and syntactic annotation will be explained. The aim is to develop a diachronic and annotated corpus that could be used as an electronical resource for linguistic and historical research of Spanish and Portuguese.},
+	language = {es},
+	journal = {Janus: Estudos sobre el Siglo de Oro},
+	author = {Vaamonde, Gael and Costa, Luisa and Marquilhas, Rita and Pinto, Clara and Pratas, Fernanda},
+	year = {2014},
+	pages = {473--482},
+	file = {Vaam - Post Scriptum Archivo Digital de Escritura Cotidi.pdf:C\:\\Users\\mkran\\Zotero\\storage\\3XRJ35L6\\Vaam - Post Scriptum Archivo Digital de Escritura Cotidi.pdf:application/pdf}
+}
+
+@article{vaamonde_p._2015,
+	title = {P. {S}. {Post} {Scriptum}: {Dos} corpus diacrónicos de escritura cotidiana},
+	volume = {55},
+	url = {http://journal.sepln.org/sepln/ojs/ojs/index.php/pln/article/view/5216},
+	abstract = {In this paper, we present an overall description of P. S. Post Scriptum. Within this research project, systematic research will be developed, along with the publishing and historical-linguistic study of private letters written in Portugal and Spain along the Modern Ages. The letters included in P. S. Post Scriptum are unpublished manuscripts, written by authors from different social backgrounds. In addition, these textual resources often present an (almost) oral rhetoric, treating everyday issues of past centuries. They are, therefore, of great interest for research in Diachronic Linguistics. We aim to publish and study 7,000 of those letters. For this purpose, we are preparing a scholarly digital edition of the manuscripts and, simultaneously, converting the content of the letters into two annotated corpora of a million words each, one containing the Portuguese letters, the other the Spanish.},
+	language = {es},
+	journal = {Procesamiento del Lenguaje Natural},
+	author = {Vaamonde, Gael},
+	month = sep,
+	year = {2015},
+	pages = {8},
+	file = {Vaamonde - P. S. Post Scriptum Dos corpus diacrónicos de esc.pdf:C\:\\Users\\mkran\\Zotero\\storage\\VMVJSALA\\Vaamonde - P. S. Post Scriptum Dos corpus diacrónicos de esc.pdf:application/pdf}
+}
+
+@inproceedings{bollmann_multi-task_2018,
+	address = {Melbourne, Australia},
+	title = {Multi-task learning for historical text normalization: {Size} matters},
+	url = {https://www.aclweb.org/anthology/W18-3403},
+	abstract = {Historical text normalization suffers from small datasets that exhibit high variance, and previous work has shown that multi-task learning can be used to leverage data from related problems in order to obtain more robust models. Previous work has been limited to datasets from a specific language and a specific historical period, and it is not clear whether results generalize. It therefore remains an open problem, when historical text normalization benefits from multi-task learning. We explore the benefits of multi-task learning across 10 different datasets, representing different languages and periods. Our main finding—contrary to what has been observed for other NLP tasks—is that multi-task learning mainly works when target task data is very scarce.},
+	language = {en},
+	booktitle = {Proceedings of the {Workshop} on {Deep} {Learning} {Approaches} for {Low}-{Resource} {NLP}},
+	publisher = {Association for Computational Linguistics},
+	author = {Bollmann, Marcel and Søgaard, Anders and Bingel, Joachim},
+	month = jul,
+	year = {2018},
+	pages = {19--24},
+	file = {Bollman et al. - Multi-task learning for historical text normalization - Size Matters.pdf:C\:\\Users\\mkran\\Zotero\\storage\\6YD7AIAP\\Bollman et al. - Multi-task learning for historical text normalization - Size Matters.pdf:application/pdf}
+}
+
+@phdthesis{pettersson_spelling_2016,
+	title = {Spelling {Normalisation} and {Linguistic} {Analysis} of {Historical} {Text} for {Information} {Extraction}},
+	url = {http://uu.diva-portal.org/smash/get/diva2:885117/FULLTEXT01.pdf},
+	abstract = {Historical text constitutes a rich source of information for historians and other researchers in humanities. Many texts are however not available in an electronic format, and even if they are, there is a lack of NLP tools designed to handle historical text. In my thesis, I aim to provide a generic workflow for automatic linguistic analysis and information extraction from historical text, with spelling normalisation as a core component in the pipeline. In the spelling normalisation step, the historical input text is automatically normalised to a more modern spelling, enabling the use of existing taggers and parsers trained on modern language data in the succeeding linguistic analysis step. In the final information extraction step, certain linguistic structures are identified based on the annotation labels given by the NLP tools, and ranked in
+accordance with the specific information need expressed by the user.
+
+An important consideration in my implementation is that the pipeline should be applicable to different languages, time periods, genres, and information needs by simply substituting the language resources used in each module. Furthermore, the reuse of existing NLP tools developed for the modern language is crucial, considering the lack of linguistically annotated historicaldata combined with the high variability in historical text, making it hard to train NLP tools specifically aimed at analysing historical text.
+
+In my evaluation, I show that spelling normalisation can be a very useful technique for easy access to historical information content, even in cases where there is little (or no) annotated historical training data available. For the specific information extraction task of automatically identifying verb phrases describing work in Early Modern Swedish text, 91 out of the 100 topranked instances are true positives in the best setting.},
+	language = {en},
+	school = {Uppsala Universitet},
+	author = {Pettersson, Eva},
+	year = {2016},
+	file = {Pettersson et al. - Spelling Normalisation and Linguistic Analysis of Historical Text for Information Extraction.pdf:C\:\\Users\\mkran\\Zotero\\storage\\M6X8VY8R\\Pettersson et al. - Spelling Normalisation and Linguistic Analysis of Historical Text for Information Extraction.pdf:application/pdf}
+}
