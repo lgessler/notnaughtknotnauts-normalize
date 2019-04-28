@@ -81,9 +81,9 @@ def main(args):
         predictor = SimpleSeq2SeqPredictor(model, reader)
 
         for instance in itertools.islice(validation_dataset, 10):
-            print('SOURCE:', instance.fields['source_tokens'].tokens)
-            print('GOLD:', instance.fields['target_tokens'].tokens)
-            print('PRED:', predictor.predict_instance(instance)['predicted_tokens'])
+            print('SOURCE:', "".join(instance.fields['source_tokens'].tokens))
+            print('GOLD:', "".join(instance.fields['target_tokens'].tokens))
+            print('PRED:', "".join(predictor.predict_instance(instance)['predicted_tokens']))
 
 
 if __name__ == '__main__':
