@@ -39,23 +39,29 @@ class CharAccuracy(Metric):
 
     def __call__(self, predictions, gold_labels, mask=None):
         predictions, gold_labels, mask = self.unwrap_to_tensors(predictions, gold_labels, mask)
-        k = predictions.size()[1]
-        expanded_size = list(gold_labels.size())
-        expanded_size.insert(1, k)
-        expanded_gold = gold_labels.unsqueeze(1).expand(expanded_size)
 
-        if mask is not None:
-            expanded_mask = mask.unsqueeze(1).expand(expanded_size)
-            masked_gold = expanded_mask * expanded_gold
-            masked_predictions = expanded_mask * predictions
-        else:
-            masked_gold = expanded_gold
-            masked_predictions = predictions
+        s = ""
+        for i in range(predictions.size()[1]):
+            s += vocab.get_token_from_index(predictions[0, i].item(), namespace="target_tokens")
+            s += " "
+        print(s)
+
+        s = ""
+        for i in range(gold_labels.size()[1]):
+            s += vocab.get_token_from_index(gold_labels[0, i].item(), namespace="target_tokens")
+            s += " "
+        print(s)
+
+        gold = gold_labels[0, :-1]
+        pred = predictions[0, :]
+        mask = mask[0, :-1]
+
+        masked_gold = mask * gold
+        masked_predictions = mask * pred
 
         eqs = masked_gold.eq(masked_predictions)
-        matches_per_question = eqs.min(dim=2)[0]
-        some_match = matches_per_question.max(dim=1)[0]
-        correct = some_match.sum().item()
+        correct = eqs.sum().item()
+        print(correct)
 
         self.total_count += predictions.size()[0]
         self.correct_count += correct
@@ -92,13 +98,14 @@ class AttentionSeq2Seq(SimpleSeq2Seq):
                          target_namespace=target_namespace,
                          attention=attention,
                          beam_size=beam_size)
-        self.accuracy = CategoricalAccuracy()
+        self.accuracy = CharAccuracy()
 
     def forward(self, source_tokens, target_tokens):
         output_dict = super().forward(source_tokens, target_tokens)
         top_k_predictions = output_dict["predictions"]
-        mask = util.get_text_field_mask(target_tokens)[:, 0]
-        self.accuracy(top_k_predictions, target_tokens["tokens"][:, 0], mask=mask)
+        if target_tokens is not None:
+            mask = util.get_text_field_mask(target_tokens)
+            self.accuracy(top_k_predictions, target_tokens["tokens"], mask=mask)
         return output_dict
 
     def get_metrics(self, reset=False):
@@ -106,12 +113,14 @@ class AttentionSeq2Seq(SimpleSeq2Seq):
 
 
 def main(args):
+    global vocab
     reader = Seq2SeqDatasetReader(
         source_tokenizer=CharacterTokenizer(),
         target_tokenizer=CharacterTokenizer(),
         source_token_indexers={'tokens': SingleIdTokenIndexer()},
         target_token_indexers={'tokens': SingleIdTokenIndexer(namespace='target_tokens')})
-    train_dataset = reader.read('../data/all_centuries_toks.train.tsv')
+    #train_dataset = reader.read('../data/all_centuries_toks.train.tsv')
+    train_dataset = reader.read('../data/all_centuries_toks.test.tsv')
     validation_dataset = reader.read('../data/all_centuries_toks.dev.tsv')
     test_dataset = reader.read('../data/all_centuries_toks.test.tsv')
 
@@ -152,9 +161,13 @@ def main(args):
                       iterator=iterator,
                       train_dataset=train_dataset,
                       validation_dataset=validation_dataset,
-                      patience=5,
-                      num_epochs=100,
+                      #patience=5,
+                      #num_epochs=100,
                       cuda_device=CUDA_DEVICE)
+
+    for instance in itertools.islice(train_dataset, 5):
+        print('SOURCE:', instance.fields['source_tokens'].tokens)
+        print('GOLD:', instance.fields['target_tokens'].tokens)
 
     for i in range(50):
         print('Epoch: {}'.format(i))
@@ -163,9 +176,9 @@ def main(args):
         predictor = SimpleSeq2SeqPredictor(model, reader)
 
         for instance in itertools.islice(validation_dataset, 10):
-            print('SOURCE:', "".join(instance.fields['source_tokens'].tokens))
-            print('GOLD:', "".join(instance.fields['target_tokens'].tokens))
-            print('PRED:', "".join(predictor.predict_instance(instance)['predicted_tokens']))
+            print('SOURCE:', (instance.fields['source_tokens'].tokens))
+            print('GOLD:', (instance.fields['target_tokens'].tokens))
+            print('PRED:', (predictor.predict_instance(instance)['predicted_tokens']))
 
 
     predictor = SimpleSeq2SeqPredictor(model, reader)
