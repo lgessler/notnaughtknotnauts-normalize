@@ -24,8 +24,8 @@ from allennlp.training.metrics import CategoricalAccuracy
 
 from parse_spanish import retrieve_tokens, retrieve_century
 
-ORIG_EMBEDDING_DIM = 256
-NORM_EMBEDDING_DIM = 256
+ORIG_EMBEDDING_DIM = 128
+NORM_EMBEDDING_DIM = 128
 HIDDEN_DIM = 256
 if torch.cuda.is_available():
     CUDA_DEVICE = 0
@@ -40,31 +40,58 @@ class CharAccuracy(Metric):
     def __call__(self, predictions, gold_labels, mask=None):
         predictions, gold_labels, mask = self.unwrap_to_tensors(predictions, gold_labels, mask)
 
-        s = ""
-        for i in range(predictions.size()[1]):
-            s += vocab.get_token_from_index(predictions[0, i].item(), namespace="target_tokens")
-            s += " "
-        print(s)
+        batch_size = predictions.size()[0]
+        training = len(predictions.size()) == 2
 
-        s = ""
-        for i in range(gold_labels.size()[1]):
-            s += vocab.get_token_from_index(gold_labels[0, i].item(), namespace="target_tokens")
-            s += " "
-        print(s)
+        #if not training:
+        #    for j in range(batch_size):
+        #        s = ""
+        #        for i in range(predictions.size()[2]):
+        #            s += vocab.get_token_from_index(predictions[j, 0, i].item(), namespace="target_tokens")
+        #        print(s)
 
-        gold = gold_labels[0, :-1]
-        pred = predictions[0, :]
-        mask = mask[0, :-1]
+        #    for j in range(batch_size):
+        #        s = ""
+        #        for i in range(gold_labels.size()[1]):
+        #            s += vocab.get_token_from_index(gold_labels[j, i].item(), namespace="target_tokens")
+        #        print(s)
 
-        masked_gold = mask * gold
-        masked_predictions = mask * pred
+        # a quirk of SimpleSeq2Seq is that if the longest item in the batch has length
+        # n, it produces predictions that are n-1 long. (The reasoning: it's either
+        # going to be '@end@' or '@@PADDING@@', so it's not worth producing.) This
+        # means, however, that we need to reshape the gold labels by trimming off
+        # the last bit of dimension 1. (We're only interested in calculating accuracy
+        # for "meaningful" tokens, anyway.)
+        if training:
+            gold = gold_labels.narrow(1, 0, gold_labels.size()[1] - 1)
+            mask = mask.narrow(1, 0, mask.size()[1] - 1)
+            pred = predictions.narrow(1, 0, mask.size()[1])
+        else:
+            # take the best prediction
+            pred = predictions.narrow(1, 0, 1).squeeze(1)
 
-        eqs = masked_gold.eq(masked_predictions)
-        correct = eqs.sum().item()
-        print(correct)
+            # same as above
+            gold = gold_labels.narrow(1, 0, gold_labels.size()[1])
+            mask = mask.narrow(1, 0, mask.size()[1])
 
-        self.total_count += predictions.size()[0]
-        self.correct_count += correct
+            # prediction length might not be as long as or as short as the longest
+            # gold sequence--make sure they're the same
+            if pred.size()[1] >= mask.size()[1]:
+                pred = pred.narrow(1, 0, mask.size()[1])
+            else:
+                len_diff = mask.size()[1] - pred.size()[1]
+                pred = torch.cat((pred,
+                                  torch.zeros(batch_size,
+                                              len_diff,
+                                              dtype=torch.long)),
+                                 dim=1)
+
+        eqs = mask * gold.eq(pred).long()
+        correct_chars = eqs.sum(dim=1)
+        total_chars = mask.sum(dim=1)
+
+        self.correct_count += correct_chars.sum().item()
+        self.total_count += total_chars.sum().item()
 
     def get_metric(self, reset: bool = False):
         """
@@ -113,14 +140,15 @@ class AttentionSeq2Seq(SimpleSeq2Seq):
 
 
 def main(args):
-    global vocab
+    # uncomment if you want to print batches above
+    #global vocab
     reader = Seq2SeqDatasetReader(
         source_tokenizer=CharacterTokenizer(),
         target_tokenizer=CharacterTokenizer(),
         source_token_indexers={'tokens': SingleIdTokenIndexer()},
         target_token_indexers={'tokens': SingleIdTokenIndexer(namespace='target_tokens')})
-    #train_dataset = reader.read('../data/all_centuries_toks.train.tsv')
-    train_dataset = reader.read('../data/all_centuries_toks.test.tsv')
+    train_dataset = reader.read('../data/all_centuries_toks.train.tsv')
+    #train_dataset = reader.read('../data/all_centuries_toks.train.tiny.tsv')
     validation_dataset = reader.read('../data/all_centuries_toks.dev.tsv')
     test_dataset = reader.read('../data/all_centuries_toks.test.tsv')
 
@@ -173,12 +201,12 @@ def main(args):
         print('Epoch: {}'.format(i))
         trainer.train()
 
-        predictor = SimpleSeq2SeqPredictor(model, reader)
+        #predictor = SimpleSeq2SeqPredictor(model, reader)
 
-        for instance in itertools.islice(validation_dataset, 10):
-            print('SOURCE:', (instance.fields['source_tokens'].tokens))
-            print('GOLD:', (instance.fields['target_tokens'].tokens))
-            print('PRED:', (predictor.predict_instance(instance)['predicted_tokens']))
+        #for instance in itertools.islice(validation_dataset, 10):
+        #    print('SOURCE:', (instance.fields['source_tokens'].tokens))
+        #    print('GOLD:', (instance.fields['target_tokens'].tokens))
+        #    print('PRED:', (predictor.predict_instance(instance)['predicted_tokens']))
 
 
     predictor = SimpleSeq2SeqPredictor(model, reader)
