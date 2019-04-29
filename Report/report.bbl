@@ -1,0 +1,11 @@
+\begin{thebibliography}{1}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+
+\bibitem[{Bollmann et~al.(2019)Bollmann, Korchagina, and
+  Søgaard}]{bollmann_few-shot_2019}
+Marcel Bollmann, Natalia Korchagina, and Anders Søgaard. 2019.
+\newblock \href {https://arxiv.org/abs/1903.04870} {Few-{Shot} and
+  {Zero}-{Shot} {Learning} for {Historical} {Text} {Normalization}}.
+\newblock page~10.
+
+\end{thebibliography}
