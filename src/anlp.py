@@ -87,6 +87,8 @@ class CharAccuracy(Metric):
                                  dim=1)
 
         eqs = mask * gold.eq(pred).long()
+        if CUDA_DEVICE > -1:
+            eqs = eqs.cuda()
         correct_chars = eqs.sum(dim=1)
         total_chars = mask.sum(dim=1)
 
