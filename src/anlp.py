@@ -27,10 +27,11 @@ from parse_spanish import retrieve_tokens, retrieve_century
 ORIG_EMBEDDING_DIM = 128
 NORM_EMBEDDING_DIM = 128
 HIDDEN_DIM = 256
-if torch.cuda.is_available():
-    CUDA_DEVICE = 0
-else:
-    CUDA_DEVICE = -1
+#if torch.cuda.is_available():
+#    CUDA_DEVICE = 0
+#else:
+#    CUDA_DEVICE = -1
+CUDA_DEVICE = -1
 
 class CharAccuracy(Metric):
     def __init__(self):
@@ -122,11 +123,16 @@ class AttentionSeq2Seq(SimpleSeq2Seq):
                        target_namespace=None,
                        attention=None,
                        beam_size=8):
+        if CUDA_DEVICE > -1:
+            source_embedder = source_embedder.cuda()
+            encoder = encoder.cuda()
         super().__init__(vocab, source_embedder, encoder, max_decoding_steps,
                          target_embedding_dim=target_embedding_dim,
                          target_namespace=target_namespace,
                          attention=attention,
                          beam_size=beam_size)
+        if CUDA_DEVICE > -1 and self._target_embedder:
+            self._target_embedder = self._target_embedder.cuda()
         self.accuracy = CharAccuracy()
 
     def forward(self, source_tokens, target_tokens):
@@ -191,17 +197,19 @@ def main(args):
                       iterator=iterator,
                       train_dataset=train_dataset,
                       validation_dataset=validation_dataset,
-                      #patience=5,
-                      #num_epochs=100,
+                      patience=5,
+                      num_epochs=100,
                       cuda_device=CUDA_DEVICE)
 
     for instance in itertools.islice(train_dataset, 5):
         print('SOURCE:', instance.fields['source_tokens'].tokens)
         print('GOLD:', instance.fields['target_tokens'].tokens)
 
-    for i in range(50):
-        print('Epoch: {}'.format(i))
-        trainer.train()
+    trainer.train()
+
+    #for i in range(50):
+    #    print('Epoch: {}'.format(i))
+    #    trainer.train()
 
         #predictor = SimpleSeq2SeqPredictor(model, reader)
 
@@ -210,8 +218,6 @@ def main(args):
         #    print('GOLD:', (instance.fields['target_tokens'].tokens))
         #    print('PRED:', (predictor.predict_instance(instance)['predicted_tokens']))
 
-
-    predictor = SimpleSeq2SeqPredictor(model, reader)
 
 
 if __name__ == '__main__':
