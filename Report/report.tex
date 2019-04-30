@@ -42,19 +42,60 @@
 
 \begin{document}
 \maketitle
-\begin{abstract}
 
+\begin{abstract}
+We explore several model architectures for token-based historical text normalization. At the token level, we observe that a na\"ive baseline imposes an upper bound on model performance on tokens seen in training data. Accordingly, we implement an LSTM model and a transformer model to predict unseen tokens and incorporate the baseline's predictions for seen tokens. We test these hybrid models on historical Spanish texts and achieve results that are on par with state-of-the-art models. We also note that TODO outperforms TODO.
 \end{abstract}
 
 \section{Introduction}
-\cite{bollmann_few-shot_2019}
+In many cases, researchers require or prefer to work with standardized data. In this work, we examine historical text normalization---``the problem of translating historical documents written in the absence of modern spelling conventions and making them amenable to search by today’s scholars, processable by natural language processing models, and readable to laypeople" \cite{bollmann_multi-task_2018}. This is a standardization problem that...
+
+\subsection{Motivating the Normalization Problem}
+% TODO: Cite Amir's stuff on Coptic normalization:
+% https://www.aclweb.org/anthology/W16-2119
+% http://copticscriptorium.org/FAQ.html
+
 \section{Related Work}
+Historical text normalization has received renewed attention as neural approaches have gained traction in the NLP community. Over the past ten years, the state of the art has seen an evolution from Hidden Markov Models and rule-based models to simple neural networks to more context-aware recurrent neural networks. Most recently, there is a shift toward attention and transformers.
+\subsection{HMM and Rule-Based Methods}
+\subsection{Neural Networks}
+\subsection{Recurrent Neural Networks}
+\subsection {Attention and Transformers}
+
 \section{Model}
 \subsection{Dataset}
+For this research, we make use of the Post Scriptum corpus, a resource built in 2014 to promote work in the digital humanities \cite{vaamonde_post_2014}. The corpus contains epistolary texts in Spanish and Portuguese, ranging from the 16th century to the 19th century. These documents are unpublished and  represent a diverse set of social backgrounds. For our experiments, we use only the Spanish texts, totaling 2368 documents. Each original document is accompanied by a corresponding manually modernized document. Our models ingest an original token as input and predict the best modern equivalent.
+\subsubsection{Example}
+% TODO: Fix figure formatting
+\begin{figure}[h]
+\begin{quotation}
+\noindent \textit{por me hazer md me ebye el bonete q conpre aqui}
+\caption{Test}
+\end{quotation}
+\end{figure}
+\begin{figure}[h]
+\begin{quote}
+\textit{Por me hacer merced, me envíe el bonete que compré aquí.}
+\caption{Modernized}
+\end{quote}
+\end{figure}
 \subsection{Na\"ive Baseline}
 \subsection{LSTM Model}
 \subsection{Transformer Model}
+
+\section{Results}
+% TODO: Fix table headings
+\begin{center}
+	\begin{tabular}{ c c c c c  c}
+		Char & Char & Char & Word & Word & Word\\
+		\hline
+		1 & 1 & 1 & 1 & 1 & 1
+	\end{tabular}
+\end{center}
+
+%TODO: Add character-differential accuracy table
 \section{Analysis}
+
 \section{Conclusion}
 
 \section*{Acknowledgments}

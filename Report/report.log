@@ -1,12 +1,12 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7000 64-bit) (preloaded format=pdflatex 2019.4.28)  28 APR 2019 17:50
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6880 64-bit) (preloaded format=pdflatex 2018.12.12)  29 APR 2019 22:26
 entering extended mode
 **./report.tex
 (report.tex
-LaTeX2e <2018-12-01>
-("C:\Program Files\MiKTeX 2.9\tex/latex/base\article.cls"
-Document Class: article 2018/09/03 v1.4i Standard LaTeX document class
-("C:\Program Files\MiKTeX 2.9\tex/latex/base\size11.clo"
-File: size11.clo 2018/09/03 v1.4i Standard LaTeX file (size option)
+LaTeX2e <2018-04-01> patch level 5
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\article.cls"
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\size11.clo"
+File: size11.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
 )
 \c@part=\count80
 \c@section=\count81
@@ -20,7 +20,7 @@ File: size11.clo 2018/09/03 v1.4i Standard LaTeX file (size option)
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
 )
-(C:\Users\mkran\AppData\Roaming\MiKTeX\2.9\tex/latex/preprint\authblk.sty
+("C:\Program Files\MiKTeX 2.9\tex\latex\preprint\authblk.sty"
 Package: authblk 2001/02/27 1.3 (PWD)
 \affilsep=\skip43
 \@affilsep=\skip44
@@ -28,14 +28,14 @@ Package: authblk 2001/02/27 1.3 (PWD)
 \c@authors=\count89
 \c@affil=\count90
 )
-(naaclhlt2019.sty ("C:\Program Files\MiKTeX 2.9\tex/latex/hyperref\hyperref.sty
+(naaclhlt2019.sty ("C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\hyperref.sty
 "
 Package: hyperref 2018/11/30 v6.88e Hypertext links for LaTeX
- ("C:\Program Files\MiKTeX 2.9\tex/generic/oberdiek\hobsub-hyperref.sty"
+ ("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\hobsub-hyperref.sty"
 Package: hobsub-hyperref 2016/05/16 v1.14 Bundle oberdiek, subset hyperref (HO)
 
 
-("C:\Program Files\MiKTeX 2.9\tex/generic/oberdiek\hobsub-generic.sty"
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\hobsub-generic.sty"
 Package: hobsub-generic 2016/05/16 v1.14 Bundle oberdiek, subset generic (HO)
 Package: hobsub 2016/05/16 v1.14 Construct package bundles (HO)
 Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
@@ -71,31 +71,31 @@ Package: atbegshi 2016/06/09 v1.18 At begin shipout hook (HO)
 Package: refcount 2016/05/16 v3.5 Data extraction from label references (HO)
 Package: hycolor 2016/05/16 v1.8 Color options for hyperref/bookmark (HO)
 )
-("C:\Program Files\MiKTeX 2.9\tex/latex/graphics\keyval.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\keyval.sty"
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
 \KV@toks@=\toks14
 )
-("C:\Program Files\MiKTeX 2.9\tex/generic/ifxetex\ifxetex.sty"
+("C:\Program Files\MiKTeX 2.9\tex\generic\ifxetex\ifxetex.sty"
 Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 )
-("C:\Program Files\MiKTeX 2.9\tex/latex/oberdiek\auxhook.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\auxhook.sty"
 Package: auxhook 2016/05/16 v1.4 Hooks for auxiliary files (HO)
 )
-("C:\Program Files\MiKTeX 2.9\tex/latex/oberdiek\kvoptions.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\kvoptions.sty"
 Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
 )
 \@linkdim=\dimen103
 \Hy@linkcounter=\count91
 \Hy@pagecounter=\count92
 
-("C:\Program Files\MiKTeX 2.9\tex/latex/hyperref\pd1enc.def"
+("C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\pd1enc.def"
 File: pd1enc.def 2018/11/30 v6.88e Hyperref: PDFDocEncoding definition (HO)
 Now handling font encoding PD1 ...
 ... no UTF-8 mapping file for font encoding PD1
 )
 \Hy@SavedSpaceFactor=\count93
 
-("C:\Program Files\MiKTeX 2.9\tex/latex/00miktex\hyperref.cfg"
+("C:\Program Files\MiKTeX 2.9\tex\latex\00miktex\hyperref.cfg"
 File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
 )
 Package hyperref Info: Hyper figures OFF on input line 4519.
@@ -107,7 +107,7 @@ Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4772.
 \c@Hy@tempcnt=\count94
 
-(C:\Users\mkran\AppData\Roaming\MiKTeX\2.9\tex/latex/url\url.sty
+("C:\Program Files\MiKTeX 2.9\tex\latex\url\url.sty"
 \Urlmuskip=\muskip10
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
@@ -131,27 +131,27 @@ LaTeX Info: Redefining \pageref on input line 6454.
 )
 Package hyperref Info: Driver (autodetected): hpdftex.
 
-("C:\Program Files\MiKTeX 2.9\tex/latex/hyperref\hpdftex.def"
+("C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\hpdftex.def"
 File: hpdftex.def 2018/11/30 v6.88e Hyperref driver for pdfTeX
 \Fld@listcount=\count99
 \c@bookmark@seq@number=\count100
 
-("C:\Program Files\MiKTeX 2.9\tex/latex/oberdiek\rerunfilecheck.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\rerunfilecheck.sty"
 Package: rerunfilecheck 2016/05/16 v1.8 Rerun checks for auxiliary files (HO)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 82.
 )
 \Hy@SectionHShift=\skip45
 )
-(C:\Users\mkran\AppData\Roaming\MiKTeX\2.9\tex/latex/xcolor\xcolor.sty
+("C:\Program Files\MiKTeX 2.9\tex\latex\xcolor\xcolor.sty"
 Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
 
-("C:\Program Files\MiKTeX 2.9\tex/latex/graphics-cfg\color.cfg"
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics-cfg\color.cfg"
 File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
 Package xcolor Info: Driver file: pdftex.def on input line 225.
 
-("C:\Program Files\MiKTeX 2.9\tex/latex/graphics-def\pdftex.def"
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics-def\pdftex.def"
 File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
 )
 Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
@@ -168,22 +168,22 @@ Package hyperref Info: Option `colorlinks' set `true' on input line 105.
 
 Conference Style for NAACL-HLT 2019
 \titlebox=\skip46
-\aclrulerbox=\box27
+\aclrulerbox=\box26
 \aclrulercount=\count101
 \aclruleroffset=\dimen107
 \cv@lineheight=\dimen108
 \cv@boxheight=\dimen109
-\cv@tmpbox=\box28
+\cv@tmpbox=\box27
 \cv@refno=\count102
 \cv@tot=\count103
 \cv@tmpc@=\count104
 \cv@tmpc=\count105
-(C:\Users\mkran\AppData\Roaming\MiKTeX\2.9\tex/latex/caption\caption.sty
-Package: caption 2016/02/21 v3.3-144 Customizing captions (AR)
+("C:\Program Files\MiKTeX 2.9\tex\latex\caption\caption.sty"
+Package: caption 2018/10/06 v3.3-154 Customizing captions (AR)
 
-(C:\Users\mkran\AppData\Roaming\MiKTeX\2.9\tex/latex/caption\caption3.sty
-Package: caption3 2016/05/22 v1.7-166 caption3 kernel (AR)
-Package caption3 Info: TeX engine: e-TeX on input line 67.
+("C:\Program Files\MiKTeX 2.9\tex\latex\caption\caption3.sty"
+Package: caption3 2018/09/12 v1.8c caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 64.
 \captionmargin=\dimen110
 \captionmargin@=\dimen111
 \captionwidth=\dimen112
@@ -192,20 +192,21 @@ Package caption3 Info: TeX engine: e-TeX on input line 67.
 \caption@parindent=\dimen115
 \caption@hangindent=\dimen116
 )
-\c@ContinuedFloat=\count106
+\c@caption@flags=\count106
+\c@ContinuedFloat=\count107
 Package caption Info: hyperref package is loaded.
 )
-(C:\Users\mkran\AppData\Roaming\MiKTeX\2.9\tex/latex/natbib\natbib.sty
+("C:\Program Files\MiKTeX 2.9\tex\latex\natbib\natbib.sty"
 Package: natbib 2010/09/13 8.31b (PWD, AO)
 \bibhang=\skip47
 \bibsep=\skip48
 LaTeX Info: Redefining \cite on input line 694.
-\c@NAT@ctr=\count107
+\c@NAT@ctr=\count108
 ))
-("C:\Program Files\MiKTeX 2.9\tex/latex/psnfss\times.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\times.sty"
 Package: times 2005/04/12 PSNFSS-v9.2a (SPQR) 
 )
-("C:\Program Files\MiKTeX 2.9\tex/latex/base\latexsym.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\latexsym.sty"
 Package: latexsym 1998/08/17 v2.2e Standard LaTeX package (lasy symbols)
 \symlasy=\mathgroup4
 LaTeX Font Info:    Overwriting symbol font `lasy' in version `bold'
@@ -229,19 +230,19 @@ LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 43.
 LaTeX Font Info:    ... okay on input line 43.
 LaTeX Font Info:    Try loading font information for OT1+ptm on input line 43.
 
-("C:\Program Files\MiKTeX 2.9\tex/latex/psnfss\ot1ptm.fd"
+("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\ot1ptm.fd"
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
-\AtBeginShipoutBox=\box29
+\AtBeginShipoutBox=\box28
 Package hyperref Info: Link coloring ON on input line 43.
 
-("C:\Program Files\MiKTeX 2.9\tex/latex/hyperref\nameref.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\nameref.sty"
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 
-("C:\Program Files\MiKTeX 2.9\tex/generic/oberdiek\gettitlestring.sty"
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\gettitlestring.sty"
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
-\c@section@level=\count108
+\c@section@level=\count109
 )
 LaTeX Info: Redefining \ref on input line 43.
 LaTeX Info: Redefining \pageref on input line 43.
@@ -252,18 +253,18 @@ LaTeX Info: Redefining \nameref on input line 43.
 \openout3 = `report.out'.
 
 
-(C:\Users\mkran\AppData\Roaming\MiKTeX\2.9\tex/context/base\supp-pdf.mkii
+("C:\Program Files\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count109
+\scratchcounter=\count110
 \scratchdimen=\dimen117
-\scratchbox=\box30
-\nofMPsegments=\count110
-\nofMParguments=\count111
+\scratchbox=\box29
+\nofMPsegments=\count111
+\nofMParguments=\count112
 \everyMPshowfont=\toks15
-\MPscratchCnt=\count112
+\MPscratchCnt=\count113
 \MPscratchDim=\dimen118
-\MPnumerator=\count113
-\makeMPintoPDFobject=\count114
+\MPnumerator=\count114
+\makeMPintoPDFobject=\count115
 \everyMPtoPDFconversion=\toks16
 ) ABD: EveryShipout initializing macros
 Package caption Info: Begin \AtBeginDocument code.
@@ -278,67 +279,76 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 44.
 LaTeX Font Info:    Try loading font information for U+lasy on input line 44.
 
-("C:\Program Files\MiKTeX 2.9\tex/latex/base\ulasy.fd"
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\ulasy.fd"
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 44.
 LaTeX Font Info:    Try loading font information for OMS+ptm on input line 44.
 
-("C:\Program Files\MiKTeX 2.9\tex/latex/psnfss\omsptm.fd"
+("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\omsptm.fd"
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <12> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 44.
 LaTeX Font Info:    Try loading font information for OT1+pcr on input line 44.
 
-("C:\Program Files\MiKTeX 2.9\tex/latex/psnfss\ot1pcr.fd"
+("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\ot1pcr.fd"
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
 LaTeX Font Info:    Try loading font information for OMS+pcr on input line 44.
 
-("C:\Program Files\MiKTeX 2.9\tex/latex/psnfss\omspcr.fd"
+("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\omspcr.fd"
 File: omspcr.fd 
 )
 LaTeX Font Info:    Font shape `OMS/pcr/m/n' in size <12> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 44.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 53.
- (report.bbl)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 65.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 52.
 
-[1{C:/Users/mkran/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <10.95> on input line 88.
+
+Underfull \vbox (badness 5756) has occurred while \output is active []
+
+ [1{C:/Users/mmk119/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}
 
 
 
+] (report.bbl)
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 105.
+
+[2
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 65.
-
-(report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 65.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 65.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 105.
+ (report.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 105.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 105.
 Package rerunfilecheck Info: File `report.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 65.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 105.
  )
 (\end occurred when \iffalse on line 346 was incomplete) 
 Here is how much of TeX's memory you used:
- 6784 strings out of 492897
- 101973 string characters out of 3133498
- 194760 words of memory out of 3000000
- 10638 multiletter control sequences out of 15000+200000
- 18200 words of font info for 43 fonts, out of 3000000 for 9000
+ 6860 strings out of 492969
+ 102939 string characters out of 3135843
+ 198421 words of memory out of 3000000
+ 10659 multiletter control sequences out of 15000+200000
+ 22290 words of font info for 50 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 43i,10n,40p,281b,316s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 43i,10n,40p,637b,387s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files/MiKTe
 X 2.9/fonts/enc/dvips/base/8r.enc}<C:/Program Files/MiKTeX 2.9/fonts/type1/publ
 ic/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/courier/
 ucrr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Pr
-ogram Files/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb>
-Output written on report.pdf (1 page, 54059 bytes).
+ogram Files/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files/MiKTe
+X 2.9/fonts/type1/urw/times/utmri8a.pfb>
+Output written on report.pdf (2 pages, 76851 bytes).
 PDF statistics:
- 47 PDF objects out of 1000 (max. 8388607)
- 14 named destinations out of 1000 (max. 500000)
+ 74 PDF objects out of 1000 (max. 8388607)
+ 26 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

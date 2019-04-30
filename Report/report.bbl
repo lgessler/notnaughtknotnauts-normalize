@@ -1,4 +1,4 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{3}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 
 \bibitem[{Bollmann et~al.(2019)Bollmann, Korchagina, and
@@ -7,5 +7,22 @@ Marcel Bollmann, Natalia Korchagina, and Anders Søgaard. 2019.
 \newblock \href {https://arxiv.org/abs/1903.04870} {Few-{Shot} and
   {Zero}-{Shot} {Learning} for {Historical} {Text} {Normalization}}.
 \newblock page~10.
+
+\bibitem[{Bollmann et~al.(2018)Bollmann, Søgaard, and
+  Bingel}]{bollmann_multi-task_2018}
+Marcel Bollmann, Anders Søgaard, and Joachim Bingel. 2018.
+\newblock \href {https://www.aclweb.org/anthology/W18-3403} {Multi-task
+  learning for historical text normalization: {Size} matters}.
+\newblock In \emph{Proceedings of the {Workshop} on {Deep} {Learning}
+  {Approaches} for {Low}-{Resource} {NLP}}, pages 19--24, Melbourne, Australia.
+  Association for Computational Linguistics.
+
+\bibitem[{Vaamonde et~al.(2014)Vaamonde, Costa, Marquilhas, Pinto, and
+  Pratas}]{vaamonde_post_2014}
+Gael Vaamonde, Luisa Costa, Rita Marquilhas, Clara Pinto, and Fernanda Pratas.
+  2014.
+\newblock \href {http://hdl.handle.net/10400.26/20209} {Post {Scriptum}:
+  {Archivo} {Digital} de {Escritura} {Cotidiana}}.
+\newblock \emph{Janus: Estudos sobre el Siglo de Oro}, pages 473--482.
 
 \end{thebibliography}
