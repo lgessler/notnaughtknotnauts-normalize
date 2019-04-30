@@ -20,7 +20,6 @@ from parse_spanish import retrieve_tokens, retrieve_century
 argparser = argparse.ArgumentParser(description='Program description.')
 argparser.add_argument('-e', '--epochs', default=5, type=int, help='Number of epochs')
 argparser.add_argument('-b', '--batch-size', default=50, type=int, help='Batch Size')
-argparser.add_argument('-lr', '--learning-rate', default=0.1, type=float, help='Learning rate')
 argparser.add_argument('-do', '--dropout', default=0.3, type=float, help='Dropout rate')
 argparser.add_argument('-em', '--embedding-size', default=100, type=int, help='Embedding dimension size')
 argparser.add_argument('-hs', '--hidden-size', default=10, type=int, help='Hidden layer size')
