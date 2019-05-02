@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7000 64-bit) (preloaded format=pdflatex 2019.4.28)  1 MAY 2019 21:47
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7000 64-bit) (preloaded format=pdflatex 2019.4.28)  1 MAY 2019 22:44
 entering extended mode
 **./report.tex
 (report.tex
@@ -271,27 +271,27 @@ LaTeX Info: Redefining \] on input line 2845.
 ) (report.aux)
 \openout1 = `report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 47.
-LaTeX Font Info:    ... okay on input line 47.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 47.
-LaTeX Font Info:    ... okay on input line 47.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 47.
-LaTeX Font Info:    ... okay on input line 47.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 47.
-LaTeX Font Info:    ... okay on input line 47.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 47.
-LaTeX Font Info:    ... okay on input line 47.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 47.
-LaTeX Font Info:    ... okay on input line 47.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 47.
-LaTeX Font Info:    ... okay on input line 47.
-LaTeX Font Info:    Try loading font information for OT1+ptm on input line 47.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 48.
 
 ("C:\Program Files\MiKTeX 2.9\tex/latex/psnfss\ot1ptm.fd"
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
 \AtBeginShipoutBox=\box31
-Package hyperref Info: Link coloring ON on input line 47.
+Package hyperref Info: Link coloring ON on input line 48.
 
 ("C:\Program Files\MiKTeX 2.9\tex/latex/hyperref\nameref.sty"
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
@@ -301,9 +301,9 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 \c@section@level=\count120
 )
-LaTeX Info: Redefining \ref on input line 47.
-LaTeX Info: Redefining \pageref on input line 47.
-LaTeX Info: Redefining \nameref on input line 47.
+LaTeX Info: Redefining \ref on input line 48.
+LaTeX Info: Redefining \pageref on input line 48.
+LaTeX Info: Redefining \nameref on input line 48.
 
 (report.out) (report.out)
 \@outlinefile=\write3
@@ -327,116 +327,105 @@ LaTeX Info: Redefining \nameref on input line 47.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 48.
-LaTeX Font Info:    Try loading font information for U+lasy on input line 48.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 49.
+LaTeX Font Info:    Try loading font information for U+lasy on input line 49.
 
 ("C:\Program Files\MiKTeX 2.9\tex/latex/base\ulasy.fd"
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 48.
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 48.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 49.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 49.
 
 ("C:\Program Files\MiKTeX 2.9\tex/latex/psnfss\omsptm.fd"
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 48.
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 48.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 49.
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 49.
 
 ("C:\Program Files\MiKTeX 2.9\tex/latex/psnfss\ot1pcr.fd"
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
-LaTeX Font Info:    Try loading font information for OMS+pcr on input line 48.
+LaTeX Font Info:    Try loading font information for OMS+pcr on input line 49.
 
 ("C:\Program Files\MiKTeX 2.9\tex/latex/psnfss\omspcr.fd"
 File: omspcr.fd 
 )
 LaTeX Font Info:    Font shape `OMS/pcr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 48.
-
-Underfull \hbox (badness 1688) in paragraph at lines 55--56
-\OT1/ptm/m/n/10.95 work with stan-dard-ized data. In this work,
- []
-
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 49.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 57.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 58.
 
-Underfull \hbox (badness 1117) in paragraph at lines 58--59
+Underfull \hbox (badness 1117) in paragraph at lines 59--60
 \OT1/ptm/m/n/10.95 type of nor-mal-iza-tion per-forms a crit-i-cal role
  []
 
-[1{C:/Users/mkran/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}
+
+Underfull \vbox (badness 1596) has occurred while \output is active []
+
+ [1{C:/Users/mkran/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}
 
 
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 77--78
+Underfull \hbox (badness 10000) in paragraph at lines 78--79
 \OT1/ptm/m/n/10.95 Our code is avail-able on GitHub at
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 77--78
+Underfull \hbox (badness 10000) in paragraph at lines 78--79
 [][]$\OT1/pcr/m/n/10.95 https : / / github . com / lgessler /
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 80--80
+Underfull \hbox (badness 10000) in paragraph at lines 81--81
 [][][][][]$\OT1/pcr/m/n/9 http : / / www . helsinki . fi / varieng / CoRD /
  []
 
-
-Underfull \hbox (badness 1142) in paragraph at lines 96--97
-[]\OT1/ptm/m/n/10.95 At this point, we might some-times be left
- []
-
-
-Underfull \hbox (badness 1014) in paragraph at lines 96--97
-\OT1/ptm/m/n/10.95 with neatly even lists of to-kens, but un-for-tu-
- []
-
-
-Underfull \hbox (badness 2460) in paragraph at lines 96--97
-\OT1/ptm/m/n/10.95 cess: ap-par-ently, some to-kens in the orig-i-
- []
-
-
-Underfull \hbox (badness 1127) in paragraph at lines 96--97
-\OT1/ptm/m/n/10.95 ship with to-kens in the nor-mal-ized doc-u-ment
- []
-
 [2]
-Underfull \hbox (badness 10000) in paragraph at lines 115--116
+Underfull \hbox (badness 10000) in paragraph at lines 116--117
 \OT1/ptm/m/n/10.95 Our sec-ond sta-tis-ti-cal sys-tem was a
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 115--116
+Underfull \hbox (badness 10000) in paragraph at lines 116--117
 \OT1/ptm/m/n/10.95 transformer-based model. It was im-ple-
  []
 
 
-Underfull \hbox (badness 1983) in paragraph at lines 115--116
+Underfull \hbox (badness 1983) in paragraph at lines 116--117
 \OT1/ptm/m/n/10.95 mented us-ing Al-lenNLP. The en-coder was a
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 115--116
+Underfull \hbox (badness 10000) in paragraph at lines 116--117
 \OT1/pcr/m/n/10.95 StackedSelfAttentionEncoder\OT1/ptm/m/n/10.95 , pro-
  []
 
 
-Underfull \hbox (badness 2096) in paragraph at lines 115--116
+Underfull \hbox (badness 2096) in paragraph at lines 116--117
 \OT1/ptm/m/n/10.95 The de-coder was a mod-i-fied ver-sion of Al-
  []
 
+
+Underfull \hbox (badness 10000) in paragraph at lines 116--117
+\OT1/ptm/m/n/10.95 lenNLP's \OT1/pcr/m/n/10.95 SimpleSeq2Seq \OT1/ptm/m/n/10.95
+ pre-dic-tor that
+ []
+
+
+Underfull \hbox (badness 1521) in paragraph at lines 116--117
+\OT1/ptm/m/n/10.95 be pre-sented in the dis-cus-sion, but we were
+ []
+
 [3] [4]
-Underfull \hbox (badness 4001) in paragraph at lines 158--159
+Underfull \hbox (badness 4001) in paragraph at lines 159--160
 \OT1/ptm/m/n/10.95 We thank the at-ten-dees of the George-town
  []
 
 
-Underfull \hbox (badness 1521) in paragraph at lines 158--159
+Underfull \hbox (badness 1521) in paragraph at lines 159--160
 \OT1/ptm/m/n/10.95 EMNLP fi-nal project poster ses-sion for their
  []
 
@@ -455,26 +444,28 @@ Underfull \hbox (badness 1342) in paragraph at lines 77--84
 \OT1/ptm/m/n/10 2013.  [][]Nor-mal-i-sa-tion of His-tor-i-cal Text Us-ing
  []
 
-)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 163.
- [5]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 163.
+[5])
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 164.
+ [6
+
+]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 164.
  (report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 163.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 163.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 164.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 164.
 Package rerunfilecheck Info: File `report.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 163.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 164.
  )
 (\end occurred when \iffalse on line 346 was incomplete) 
 Here is how much of TeX's memory you used:
- 7483 strings out of 492897
- 110875 string characters out of 3133498
- 212872 words of memory out of 3000000
- 11278 multiletter control sequences out of 15000+200000
+ 7492 strings out of 492897
+ 111131 string characters out of 3133498
+ 213945 words of memory out of 3000000
+ 11284 multiletter control sequences out of 15000+200000
  30549 words of font info for 71 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 43i,14n,40p,1074b,375s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 43i,14n,40p,1105b,464s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files/MiKTe
 X 2.9/fonts/enc/dvips/base/8r.enc}<C:/Program Files/MiKTeX 2.9/fonts/type1/publ
 ic/amsfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfo
@@ -485,9 +476,9 @@ m Files/MiKTeX 2.9/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files/MiKTeX
 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/u
 rw/times/utmr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.
 pfb>
-Output written on report.pdf (5 pages, 156379 bytes).
+Output written on report.pdf (6 pages, 161747 bytes).
 PDF statistics:
- 181 PDF objects out of 1000 (max. 8388607)
- 41 named destinations out of 1000 (max. 500000)
+ 200 PDF objects out of 1000 (max. 8388607)
+ 44 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

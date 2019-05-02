@@ -1,4 +1,4 @@
-\begin{thebibliography}{15}
+\begin{thebibliography}{17}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 
 \bibitem[{Bollmann et~al.(2017)Bollmann, Bingel, and
@@ -81,6 +81,22 @@ Eva Pettersson, Beáta Megyesi, and Joakim Nivre. 2013.
 \newblock In \emph{Proceedings of the 19th {Nordic} {Conference} of
   {Computational} {Linguistics}}, page~17, Oslo, Norway. Linköping University
   Electronic Press, Sweden.
+
+\bibitem[{Piotrowski(2012)}]{piotrowski_natural_2012}
+Michael Piotrowski. 2012.
+\newblock \emph{Natural language processing for historical texts}.
+\newblock Number~17 in Synthesis lectures on human language technologies.
+  Morgan \& Claypool, San Rafael, CA.
+\newblock OCLC: 812510472.
+
+\bibitem[{Robertson and Goldwater(2018)}]{robertson_evaluating_2018}
+Alexander Robertson and Sharon Goldwater. 2018.
+\newblock \href {https://doi.org/10.18653/v1/N18-2113} {Evaluating {Historical}
+  {Text} {Normalization} {Systems}: {How} {Well} {Do} {They} {Generalize}?}
+\newblock In \emph{Proceedings of the 2018 {Conference} of the {North}
+  {American} {Chapter} of the {Association} for {Computational} {Linguistics}:
+  {Human} {Language} {Technologies}, {Volume} 2 ({Short} {Papers})}, pages
+  720--725, New Orleans, Louisiana. Association for Computational Linguistics.
 
 \bibitem[{Schneider et~al.(2017)Schneider, Pettersson, and
   Percillier}]{schneider_comparing_2017}
