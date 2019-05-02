@@ -1,5 +1,15 @@
-\begin{thebibliography}{3}
+\begin{thebibliography}{15}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+
+\bibitem[{Bollmann et~al.(2017)Bollmann, Bingel, and
+  Søgaard}]{bollmann_learning_2017}
+Marcel Bollmann, Joachim Bingel, and Anders Søgaard. 2017.
+\newblock \href {https://doi.org/10.18653/v1/P17-1031} {Learning attention for
+  historical text normalization by learning to pronounce}.
+\newblock In \emph{Proceedings of the 55th {Annual} {Meeting} of the
+  {Association} for {Computational} {Linguistics} ({Volume} 1: {Long}
+  {Papers})}, pages 332--344, Vancouver, Canada. Association for Computational
+  Linguistics.
 
 \bibitem[{Bollmann et~al.(2019)Bollmann, Korchagina, and
   Søgaard}]{bollmann_few-shot_2019}
@@ -7,6 +17,15 @@ Marcel Bollmann, Natalia Korchagina, and Anders Søgaard. 2019.
 \newblock \href {https://arxiv.org/abs/1903.04870} {Few-{Shot} and
   {Zero}-{Shot} {Learning} for {Historical} {Text} {Normalization}}.
 \newblock page~10.
+
+\bibitem[{Bollmann et~al.(2011)Bollmann, Petran, and
+  Dipper}]{bollmann_rule-based_2011}
+Marcel Bollmann, Florian Petran, and Stefanie Dipper. 2011.
+\newblock \href {https://www.aclweb.org/anthology/W11-4106} {Rule-{Based}
+  {Normalization} of {Historical} {Texts}}.
+\newblock In \emph{Proceedings of the {Workshop} on {Language} {Technologies}
+  for {Digital} {Humanities} and {Cultural} {Heritage}}, pages 32--42, Hissar,
+  Bulgaria. Association for Computational Linguistics.
 
 \bibitem[{Bollmann et~al.(2018)Bollmann, Søgaard, and
   Bingel}]{bollmann_multi-task_2018}
@@ -17,6 +36,66 @@ Marcel Bollmann, Anders Søgaard, and Joachim Bingel. 2018.
   {Approaches} for {Low}-{Resource} {NLP}}, pages 19--24, Melbourne, Australia.
   Association for Computational Linguistics.
 
+\bibitem[{Graves and Schmidhuber(2005)}]{graves_framewise_2005}
+Alex Graves and Jürgen Schmidhuber. 2005.
+\newblock \href {https://doi.org/10.1016/j.neunet.2005.06.042} {Framewise
+  phoneme classification with bidirectional {LSTM} and other neural network
+  architectures}.
+\newblock \emph{Neural Networks}, 18(5-6):602--610.
+
+\bibitem[{Jurish(2010{\natexlab{a}})}]{jurish_comparing_2010}
+Bryan Jurish. 2010{\natexlab{a}}.
+\newblock \href {https://www.aclweb.org/anthology/W10-2209} {Comparing
+  {Canonicalizations} of {Historical} {German} {Text}}.
+\newblock In \emph{Proceedings of the 11th {Meeting} of the {ACL} {Special}
+  {Interest} {Group} on {Computational} {Morphology} and {Phonology}}, pages
+  72--77, Uppsala, Sweden. Association for Computational Linguistics.
+
+\bibitem[{Jurish(2010{\natexlab{b}})}]{jurish_more_2010}
+Bryan Jurish. 2010{\natexlab{b}}.
+\newblock More {Than} {Words}: {Using} {Token} {Context} to {Improve}
+  {Canonicalization} of {Historical} {German}.
+\newblock \emph{Journal for Language Technology and Computational Linguistics},
+  25:23--40.
+
+\bibitem[{Levenshtein(1966)}]{levenshtein_binary_1966}
+Vladimir.~I. Levenshtein. 1966.
+\newblock Binary {Codes} {Capable} of {Correcting} {Deletions}, {Insertions},
+  and {Reversals}.
+\newblock \emph{Soviet physics doklady}, 10(8).
+
+\bibitem[{Pettersson(2016)}]{pettersson_spelling_2016}
+Eva Pettersson. 2016.
+\newblock \href
+  {http://uu.diva-portal.org/smash/get/diva2:885117/FULLTEXT01.pdf}
+  {\emph{Spelling {Normalisation} and {Linguistic} {Analysis} of {Historical}
+  {Text} for {Information} {Extraction}}}.
+\newblock Ph.D. thesis, Uppsala Universitet.
+
+\bibitem[{Pettersson et~al.(2013)Pettersson, Megyesi, and
+  Nivre}]{pettersson_normalisation_2013}
+Eva Pettersson, Beáta Megyesi, and Joakim Nivre. 2013.
+\newblock \href {https://www.aclweb.org/anthology/W13-5617} {Normalisation of
+  {Historical} {Text} {Using} {Context}-{Sensitive} {Weighted} {Levenshtein}
+  {Distance} and {Compound} {Splitting}}.
+\newblock In \emph{Proceedings of the 19th {Nordic} {Conference} of
+  {Computational} {Linguistics}}, page~17, Oslo, Norway. Linköping University
+  Electronic Press, Sweden.
+
+\bibitem[{Schneider et~al.(2017)Schneider, Pettersson, and
+  Percillier}]{schneider_comparing_2017}
+Gerold Schneider, Eva Pettersson, and Michael Percillier. 2017.
+\newblock \href {https://www.aclweb.org/anthology/W17-0508} {Comparing
+  {Rule}-based and {SMT}-based {Spelling} {Normalisation} for {English}
+  {Historical} {Texts}}.
+\newblock In \emph{Proceedings of the {NoDaLiDa} 2017 {Workshop} on
+  {Processing} {Historical} {Language}}, pages 40--46, Gothenburg. Linköping
+  University Electronic Press.
+
+\bibitem[{Schroeder and Zeldes(2013)}]{schroeder_coptic_2013}
+Caroline~T. Schroeder and Amir Zeldes. 2013.
+\newblock \href {http://copticscriptorium.org} {Coptic {SCRIPTORIUM}}.
+
 \bibitem[{Vaamonde et~al.(2014)Vaamonde, Costa, Marquilhas, Pinto, and
   Pratas}]{vaamonde_post_2014}
 Gael Vaamonde, Luisa Costa, Rita Marquilhas, Clara Pinto, and Fernanda Pratas.
@@ -24,5 +103,24 @@ Gael Vaamonde, Luisa Costa, Rita Marquilhas, Clara Pinto, and Fernanda Pratas.
 \newblock \href {http://hdl.handle.net/10400.26/20209} {Post {Scriptum}:
   {Archivo} {Digital} de {Escritura} {Cotidiana}}.
 \newblock \emph{Janus: Estudos sobre el Siglo de Oro}, pages 473--482.
+
+\bibitem[{Vaswani et~al.(2017)Vaswani, Shazeer, Parmar, Uszkoreit, Jones,
+  Gomez, Kaiser, and Polosukhin}]{vaswani_attention_2017}
+Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones,
+  Aidan~N Gomez, Łukasz Kaiser, and Illia Polosukhin. 2017.
+\newblock \href
+  {http://papers.nips.cc/paper/7181-attention-is-all-you-need.pdf} {Attention
+  is {All} you {Need}}.
+\newblock In \emph{Advances in {Neural} {Information} {Processing} {Systems}
+  30}, pages 5998--6008, Long Beach, CA. Curran Associates, Inc.
+
+\bibitem[{Zeldes and Schroeder(2016)}]{zeldes_nlp_2016}
+Amir Zeldes and Caroline~T. Schroeder. 2016.
+\newblock \href {https://doi.org/10.18653/v1/W16-2119} {An {NLP} {Pipeline} for
+  {Coptic}}.
+\newblock In \emph{Proceedings of the 10th {SIGHUM} {Workshop} on {Language}
+  {Technology} for {Cultural} {Heritage}, {Social} {Sciences}, and
+  {Humanities}}, pages 146--155, Berlin, Germany. Association for Computational
+  Linguistics.
 
 \end{thebibliography}
